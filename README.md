@@ -3,7 +3,7 @@
 ## CMX Members
 - William Morris [morriswa] morris.william@ku.edu
 - Kevin Rivers
-- Timothy Holmes
+- Timothy Holmes [TimoHolmes] t338h273@home.ku.edu
 - Makenna Loewenherz
 - Rahul Bhattachan
 
