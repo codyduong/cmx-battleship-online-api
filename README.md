@@ -34,6 +34,9 @@
       DB_USER=database_username_here
       DB_PASSWORD=database_password_here
 
+- Setup development database
+
+      ./src/manage.py migrate
 - Run on local machine http://localhost:8000
       
       ./src/manage.py runserver
