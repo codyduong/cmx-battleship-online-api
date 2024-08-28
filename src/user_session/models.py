@@ -1,3 +1,4 @@
+from re import fullmatch
 import uuid
 from datetime import datetime
 from typing import Optional, override
@@ -5,6 +6,13 @@ from typing import Optional, override
 from django_utils_morriswa.exceptions import ValidationException
 from django_utils_morriswa.models import DataModel
 from django_utils_morriswa.str_tools import isBlank
+
+
+# settings
+USER_SESSION_PLAYER_NAME_MIN_LEN = 4
+USER_SESSION_PLAYER_NAME_MAX_LEN = 32
+USER_SESSION_PLAYER_NAME_REGEXP = '^[A-Za-z0-9-_.]*$'
+USER_SESSION_NUM_SHIPS_OPTIONS = ['1', '2', '3', '4', '5']
 
 
 class UserSession(DataModel):
@@ -28,15 +36,15 @@ class UserSession(DataModel):
     @override
     def validate(self):
 
-        if len(self.player_name) < 4:
-            raise ValidationException(field='player_name', error='min len 4')
-        elif len(self.player_name) > 32:
-            raise ValidationException(field='player_name', error='max len 32')
+        if len(self.player_name) < USER_SESSION_PLAYER_NAME_MIN_LEN:
+            raise ValidationException(field='player_name', error=f'min len {USER_SESSION_PLAYER_NAME_MIN_LEN}')
+        elif len(self.player_name) > USER_SESSION_PLAYER_NAME_MAX_LEN:
+            raise ValidationException(field='player_name', error=f'max len {USER_SESSION_PLAYER_NAME_MAX_LEN}')
+        elif not fullmatch(USER_SESSION_PLAYER_NAME_REGEXP, self.player_name):
+            raise ValidationException(field='player_name', error='A-Z a-z 0-9 - _ . only')
 
-        if len(self.num_ships) != 1:
-            raise ValidationException(field='num_ships', error='len 1')
-        elif self.num_ships not in ['1', '2', '3', '4', '5']:
-            raise ValidationException('num_ships', 'options 1-5')
+        if self.num_ships not in USER_SESSION_NUM_SHIPS_OPTIONS:
+            raise ValidationException('num_ships', f'options: {USER_SESSION_NUM_SHIPS_OPTIONS}')
 
     @override
     def copy(self, data: dict): pass
