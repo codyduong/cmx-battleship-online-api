@@ -8,9 +8,10 @@ pyvenv.cfg
 .idea/
 .vscode/
 
-### pycache ###
+### pyjunk ###
 **/__pycache__/
 **.egg-info
+build/
 
 ### secrets ###
 secrets.properties
