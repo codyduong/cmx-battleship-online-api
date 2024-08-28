@@ -29,13 +29,23 @@ def start_session(session: UserSession) -> dict:
             gen_player_id = get_valid_id()
 
             db.execute("""
-                      insert into user_session (session_id, player_id, player_name, num_ships)
-                      values (%s, %s, %s, %s)
-                  """, (gen_session_id, gen_player_id, session.player_name, session.num_ships))
+                insert into user_session (session_id, player_id, player_name, num_ships)
+                values (%s, %s, %s, %s)
+            """, (gen_session_id, gen_player_id, session.player_name, session.num_ships))
 
         return {
             'session_id': gen_session_id,
             'player_id': gen_player_id
         }
-    except IntegrityError as ie:
-        logging.error('integrity error on start_session', ie)
+    except e:
+        logging.error('error on start_session', e)
+
+
+def end_session(session_id: uuid) -> dict:
+    try:
+        with connections.cursor() as db:
+            db.execute("""
+                delete from user_session where session_id = %s
+            """, (session_id,))
+    except e:
+        logging.error('error on end_session', e)

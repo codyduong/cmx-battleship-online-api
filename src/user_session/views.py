@@ -14,3 +14,10 @@ class UserSessionView(AnyView):
         create_session_repr = UserSession(request.data)
         session_info = user_session_dao.start_session(create_session_repr)
         return Response(status=200, data=session_info)
+
+    @staticmethod
+    def delete(request: Request) -> Response:
+        session_id = request.data.get('session_id')
+        if session_id is not None:
+            user_session_dao.end_session(session_id)
+        return Response(status=204)
