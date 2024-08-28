@@ -32,24 +32,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-
-    - uses: actions/checkout@v4
     - uses: actions/setup-python@v5
       with:
         python-version: '3.12'
-
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        aws-region: us-east-2
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-    - name: Build App
-      run: |
-        aws codeartifact login --tool pip --domain morriswa-org --repository morriswa-central
-        pip install .
-        python setup.py build
 
     - name: Login to Docker
       uses: docker/login-action@v3
@@ -59,6 +44,13 @@ jobs:
       
     - name: Build and Publish to Docker Hub
       run: |
-        cd ./build
-        docker build . -t morriswa/cmx-battleship-online-api:latest
+        export AWS_ID=${{secrets.AWS_ACCESS_KEY_ID}}
+        export AWS_SECRET=${{secrets.AWS_SECRET_ACCESS_KEY}}
+        export AWS_REGION=us-east-2
+
+        docker build \
+          --secret id=AWS_ID \
+          --secret id=AWS_SECRET \
+          --secret id=AWS_REGION \
+          . -t morriswa/cmx-battleship-online-api:latest
         docker push morriswa/cmx-battleship-online-api:latest
