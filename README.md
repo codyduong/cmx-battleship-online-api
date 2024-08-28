@@ -23,9 +23,9 @@
 - Setup PIP with morriswa-central repository (assumes AWS CLI is already configured with morriswa-developer credentials)
 
       aws codeartifact login --tool pip --domain morriswa-org --repository morriswa-central
-- Install project dependencies with PIP
+- Install project in development mode and dependencies with PIP 
 
-      pip install .
+      pip install -e .
 - Create local app environment file 'secrets.properties' in project root directory
 - Include values in secrets.properties
 
