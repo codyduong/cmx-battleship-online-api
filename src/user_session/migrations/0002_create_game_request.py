@@ -11,10 +11,10 @@ class Migration(migrations.Migration):
         migrations.RunSQL(
             sql="""create table game_request (
                 game_request_id bigserial primary key, 
-                player_invite_from char(4) not null unique, 
-                player_invite_to varchar(32) not null,
-                game_request_created timestamp not null default current_timestamp, 
-                game_request_expiration timestamp not null default current_timestamp
+                player_invite_from char(4) not null, 
+                player_invite_to char(4) not null,
+                game_request_created timestamp not null,
+                game_request_expiration timestamp not null
             );
             """,
             reverse_sql="""
