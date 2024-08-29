@@ -51,3 +51,22 @@ class UserSession(DataModel):
 
     @override
     def json(self): pass
+
+class GameRequest: 
+    def __init__(self,data:dict):
+        self.game_request_id: int= data.get('game_request_id')
+        self.player_id: str = data.get('player_id')
+        self.player_name: str = data.get('player_name')
+    
+    def json(self):
+        return{
+            'game_request_id': self.game_request_id,
+            'player_id': self.player_id,
+            'player_name': self.player_name
+        }
+       
+
+
+
+
+

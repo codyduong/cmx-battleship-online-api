@@ -21,3 +21,13 @@ class UserSessionView(AnyView):
         if session_id is not None:
             user_session_dao.end_session(session_id)
         return Response(status=204)
+    
+class GameRequestView(AnyView):
+    @staticmethod
+    def get(request:Request) -> Response: 
+        session_id = request.data.get('session_id')
+        requests = user_session_dao.get_game_request(session_id)
+        return Response(status = 200,data = [request.json()for request in requests])
+    
+
+
