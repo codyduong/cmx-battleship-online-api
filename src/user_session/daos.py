@@ -6,7 +6,6 @@ from app import connections
 from app.utils import id_generator
 from django.db import IntegrityError
 from user_session.models import UserSession, GameRequest
-from user_session.views import GameRequestView
 
 
 def get_valid_id() -> str:
