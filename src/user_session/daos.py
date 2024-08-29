@@ -55,7 +55,7 @@ def end_session(session_id: uuid) -> dict:
 def get_game_request(session_id: uuid) -> list[GameRequest]:
 
     with connections.cursor() as db:
-        db.execute('select player_id from user_session where session_id = %s', (session_id,))
+        db.execute("select player_id from user_session where session_id = %s", (session_id,))
         player_id = db.fetchone()
         if player_id is None: 
             raise BadRequestException("Player id cannot be found")
@@ -75,5 +75,5 @@ def get_game_request(session_id: uuid) -> list[GameRequest]:
         if request is None:
             return []
         
-        return [GameRequest(data)for data in request]
+        return [GameRequest(data) for data in request]
         

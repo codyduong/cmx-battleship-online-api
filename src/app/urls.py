@@ -26,5 +26,6 @@ urlpatterns = [
     path('health', app_views.health),
     path('shealth', app_views.shealth),
     path('login', app_views.login),
-    path('lobby', user_session_views.UserSessionView.as_view())
+    path('lobby', user_session_views.UserSessionView.as_view()),
+    path('game/requests', user_session_views.GameRequestView.as_view())
 ]
