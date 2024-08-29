@@ -18,12 +18,12 @@ WORKDIR /app
 # copy into /app folder
 COPY . .
 RUN pip install awscli
-RUN --mount=type=secret,id=AWS_ID \
-    --mount=type=secret,id=AWS_SECRET \
-    --mount=type=secret,id=AWS_REGION \
-    aws configure set aws_access_key_id $(cat /run/secrets/AWS_ID) && \
-    aws configure set aws_secret_access_key $(cat /run/secrets/AWS_SECRET) && \
-    aws configure set default.region $(cat /run/secrets/AWS_REGION) && \
+RUN --mount=type=secret,id=AWS_ACCESS_KEY_ID \
+    --mount=type=secret,id=AWS_SECRET_ACCESS_KEY \
+    --mount=type=secret,id=AWS_DEFAULT_REGION \
+    AWS_ACCESS_KEY_ID=$(cat /run/secrets/AWS_ACCESS_KEY_ID) \
+    AWS_SECRET_ACCESS_KEY=$(cat /run/secrets/AWS_SECRET_ACCESS_KEY) \
+    AWS_DEFAULT_REGION=$(cat /run/secrets/AWS_DEFAULT_REGION) \
     aws codeartifact login --tool pip --domain morriswa-org --repository morriswa-central
 RUN pip install .
 
