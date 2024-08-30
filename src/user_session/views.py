@@ -30,3 +30,11 @@ class GameRequestView(AnyView):
         session_id = request.data.get('session_id')
         requests = user_session_dao.get_game_request(session_id)
         return Response(status = 200,data = [request.json() for request in requests])
+    
+    @staticmethod
+    def post(request: Request) -> Response:
+        session_id = request.data.get('session_id')
+        player_id = request.data.get('player_id')
+        user_session_dao.create_game_request(session_id, player_id)
+        return Response(status = 204)
+
