@@ -27,6 +27,7 @@ load_dotenv('default.properties')
 # and load secrets to ENV
 load_dotenv('secrets.properties')
 
+RUNTIME_ENVIRONMENT = os.getenv('RUNTIME_ENVIRONMENT') or "prod";
 
 # Step 3)
 # setup django for rest application
@@ -119,22 +120,23 @@ DATABASES = {
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False if RUNTIME_ENVIRONMENT=="prod" else True
 
 # Step 5.1)
 # Security Setup
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-c&=3d4pajsp5=(*=96=kjm419&*&31!83ufdutd(b12nu*4jts'
+SECRET_KEY = os.getenv("SECRET_KEY")
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
-    'DEFAULT_AUTHENTICATION_CLASSES': ('django_utils_morriswa.local_auth.LocalAuthentication',),
+    'DEFAULT_PERMISSION_CLASSES': (),
+    'DEFAULT_AUTHENTICATION_CLASSES': (),
 }
-JWT_AUTH = {}
-CORS_EXPOSE_HEADERS = ["auth-id", "content-type", "content-length"]
+# JWT_AUTH = {}
+CORS_EXPOSE_HEADERS = ["content-type", "content-length"]
 CORS_ALLOW_HEADERS = CORS_EXPOSE_HEADERS
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://localhost:4200',
+    'https://www.morriswa.org',
 ]
 ALLOWED_HOSTS = ['*']
 CORS_ALLOW_METHODS = (
