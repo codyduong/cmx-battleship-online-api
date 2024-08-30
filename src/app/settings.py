@@ -127,11 +127,11 @@ DEBUG = False if RUNTIME_ENVIRONMENT=="prod" else True
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY")
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': (),
-    'DEFAULT_AUTHENTICATION_CLASSES': (),
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
+    'DEFAULT_AUTHENTICATION_CLASSES': ('app.authentication.SessionAuthentication',),
 }
 # JWT_AUTH = {}
-CORS_EXPOSE_HEADERS = ["content-type", "content-length"]
+CORS_EXPOSE_HEADERS = ["session-id", "content-type", "content-length"]
 CORS_ALLOW_HEADERS = CORS_EXPOSE_HEADERS
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
