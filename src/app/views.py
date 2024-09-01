@@ -19,12 +19,3 @@ def shealth(request):
     return Response({
         "msg": "hello secure world!"
     }, status=200)
-
-
-@w_view(['GET'])
-def login(request: Request) -> Response:
-    isAdmin = is_admin(request.user)
-
-    return Response(status=200, data={
-        'isAdmin': isAdmin
-    })

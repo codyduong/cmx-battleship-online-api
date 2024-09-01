@@ -19,13 +19,14 @@ from django.urls import path
 
 import app.views as app_views
 import user_session.views as user_session_views
+import lobby.views as lobby_views
 
 
 urlpatterns = [
     # core app
     path('health', app_views.health),
     path('shealth', app_views.shealth),
-    path('login', app_views.login),
-    path('lobby', user_session_views.UserSessionView.as_view()),
-    path('game/requests', user_session_views.GameRequestView.as_view())
+    path('login', user_session_views.create_session_login),
+    path('logout', user_session_views.destory_session_logout),
+    path('game/requests', lobby_views.GameRequestView.as_view())
 ]

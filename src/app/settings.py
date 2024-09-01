@@ -40,7 +40,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     # api modules
-    'user_session'
+    'db',
+    'user_session',
+    'lobby',
+    'game',
 ]
 
 MIDDLEWARE = [
