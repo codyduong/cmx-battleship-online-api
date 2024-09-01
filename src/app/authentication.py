@@ -2,6 +2,7 @@ import uuid
 import logging
 
 from rest_framework.authentication import BaseAuthentication
+from rest_framework.exceptions import AuthenticationFailed
 from app import connections
 
 class AuthenticatedPlayer:
@@ -42,7 +43,7 @@ def authenticate_session(session_id: uuid) -> AuthenticatedPlayer:
         db.execute("""select * from user_session where session_id = %s""", (session_id,))
         player_data = db.fetchone()
         if player_data is None:
-            raise BadRequestException('invalid session')
+            raise AuthenticationFailed('invalid session')
         player = AuthenticatedPlayer(player_data)
         db.execute("""update user_session set session_used = current_timestamp where session_id = %s """, (session_id,))
         return player
