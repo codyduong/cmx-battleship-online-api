@@ -60,6 +60,8 @@ def start_session(session: LoginRequest) -> dict:
                 values (%s, %s, %s, %s)
             """, (gen_session_id, gen_player_id, session.player_name, session.num_ships))
 
+        logging.info(f"Successfully started session {gen_session_id} for {session.player_name}#{gen_player_id}")
+
         return {
             'session_id': gen_session_id,
             'player_id': gen_player_id
@@ -74,5 +76,7 @@ def end_session(session_id: uuid) -> dict:
             db.execute("""
                 delete from user_session where session_id = %s;
             """, (session_id,))
+
+        logging.info(f"Safely terminated session {session_id}")
     except Exception as e:
         logging.error('error on end_session', e)
