@@ -15,6 +15,27 @@ USER_SESSION_PLAYER_NAME_REGEXP = '^[A-Za-z0-9-_.]*$'
 USER_SESSION_NUM_SHIPS_OPTIONS = ['1', '2', '3', '4', '5']
 
 
+class AuthenticatedPlayer:
+    def __init__(self, data:dict):
+        self.session_id = data.get('session_id')
+        self.player_id = data.get('player_id')
+        self.player_name = data.get('player_name')
+        self.session_started = data.get('session_started')
+
+        if self.session_id is None:
+            raise RuntimeError('session_id required')
+
+        if self.player_id is None:
+            raise RuntimeError('player_id required')
+
+        if self.player_name is None:
+            raise RuntimeError('player_name required')
+
+        if self.session_started is None:
+            raise RuntimeError('session_started required')
+
+        self.is_authenticated = True
+
 class LoginRequest(DataModel):
 
     def __init__(self, data: dict):

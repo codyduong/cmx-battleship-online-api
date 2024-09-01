@@ -1,12 +1,30 @@
 import logging
 import uuid
-from django_utils_morriswa.exceptions import BadRequestException
 import datetime
 
-from app import connections
 from django.db import IntegrityError
-from user_session.models import LoginRequest
+from rest_framework.exceptions import AuthenticationFailed
+from django_utils_morriswa.exceptions import BadRequestException
 
+from app import connections
+from user_session.models import LoginRequest, AuthenticatedPlayer
+
+
+def authenticate_session(session_id: uuid) -> AuthenticatedPlayer:
+    with connections.cursor() as db:
+        db.execute("""
+            select * 
+            from user_session
+            where 
+                session_id = %s 
+                and session_used between NOW() - INTERVAL '10 MINUTES' and NOW()
+        """, (session_id,))
+        player_data = db.fetchone()
+        if player_data is None:
+            raise AuthenticationFailed('invalid session')
+        player = AuthenticatedPlayer(player_data)
+        db.execute("""update user_session set session_used = current_timestamp where session_id = %s """, (session_id,))
+        return player
 
 def get_online_player_count() -> int:
     count: int
