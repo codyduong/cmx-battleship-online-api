@@ -62,9 +62,9 @@ class Migration(migrations.Migration):
                 AFTER INSERT OR DELETE ON user_session
                 FOR EACH ROW EXECUTE FUNCTION update_player_slot_in_use();
             """,
-            reverse_sql="""           
-                drop function if exists update_player_slot_in_use;
+            reverse_sql="""
                 drop trigger if exists user_session_ctrl_player_slot_trigger on user_session cascade;
+                drop function if exists update_player_slot_in_use;
                 drop table if exists user_session;
                 drop table if exists player_slot;
             """
