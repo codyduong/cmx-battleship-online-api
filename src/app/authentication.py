@@ -40,7 +40,12 @@ class PlayerAuthentication(BaseAuthentication):
 
 def authenticate_session(session_id: uuid) -> AuthenticatedPlayer:
     with connections.cursor() as db:
-        db.execute("""select * from user_session where session_id = %s""", (session_id,))
+        db.execute("""
+            select * 
+            from user_session
+            where 
+                session_id = %s 
+                and session_used not between NOW() - INTERVAL '10 MINUTES' and NOW()""", (session_id,))
         player_data = db.fetchone()
         if player_data is None:
             raise AuthenticationFailed('invalid session')
