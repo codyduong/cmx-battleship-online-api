@@ -5,6 +5,14 @@ from django_utils_morriswa.view_utils import w_view, unsecured
 import user_session.daos as user_session_dao
 
 
+@w_view(['GET'])
+@unsecured
+def get_online_player_count(request: Request) -> Response:
+    online_player_count = user_session_dao.get_online_player_count()
+    return Response(status=200, data={
+        'playerCount': online_player_count
+    })
+
 @w_view(['POST'])
 @unsecured
 def create_session_login(request: Request) -> Response:
