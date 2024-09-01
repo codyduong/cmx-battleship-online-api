@@ -4,16 +4,15 @@ from django_utils_morriswa.exceptions import BadRequestException
 import datetime
 
 from app import connections
-from app.utils import id_generator
 from django.db import IntegrityError
-from user_session.models import UserSession
+from user_session.models import LoginRequest
 
 
 def get_online_player_count() -> int:
     count: int
     with connections.cursor() as db:
-        db.execute("select count(player_id) as online_layer_count from player_slot where in_use = 'Y'")
-        count = db.fetchone()['online_layer_count']
+        db.execute("select count(player_id) as online_player_count from player_slot where in_use = 'Y'")
+        count = db.fetchone()['online_player_count']
 
     return count
 
@@ -25,7 +24,7 @@ def get_valid_id() -> str:
 
     return player_id
 
-def start_session(session: UserSession) -> dict:
+def start_session(session: LoginRequest) -> dict:
     try:
         gen_session_id: uuid
         gen_player_id: str

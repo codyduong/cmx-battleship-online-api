@@ -15,15 +15,11 @@ USER_SESSION_PLAYER_NAME_REGEXP = '^[A-Za-z0-9-_.]*$'
 USER_SESSION_NUM_SHIPS_OPTIONS = ['1', '2', '3', '4', '5']
 
 
-class UserSession(DataModel):
+class LoginRequest(DataModel):
 
     def __init__(self, data: dict):
-        self.session_id: Optional[uuid] = data.get('session_id')
-        self.player_id: Optional[str] = data.get('player_id')
         self.player_name: str = data.get('player_name')
         self.num_ships: str = data.get('num_ships')
-        self.session_started: Optional[datetime] = data.get('session_started')
-        self.session_used: Optional[datetime] = data.get('session_used')
 
         if self.player_name is None or isBlank(self.player_name):
             raise ValidationException(field='player_name', error='required')

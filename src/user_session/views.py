@@ -1,26 +1,24 @@
 from rest_framework.request import Request
 from rest_framework.response import Response
-from user_session.models import UserSession
-from django_utils_morriswa.view_utils import w_view, unsecured
+from user_session.models import LoginRequest
 import user_session.daos as user_session_dao
 
+from app.views import any_view, session_view
 
-@w_view(['GET'])
-@unsecured
+@any_view(['GET'])
 def get_online_player_count(request: Request) -> Response:
     online_player_count = user_session_dao.get_online_player_count()
     return Response(status=200, data={
         'playerCount': online_player_count
     })
 
-@w_view(['POST'])
-@unsecured
+@any_view(['POST'])
 def create_session_login(request: Request) -> Response:
-    create_session_repr = UserSession(request.data)
+    create_session_repr = LoginRequest(request.data)
     session_info = user_session_dao.start_session(create_session_repr)
     return Response(status=200, data=session_info)
 
-@w_view(['DELETE'])
+@session_view(['DELETE'])
 def destory_session_logout(request: Request) -> Response:
     session_id = request.user.session_id
     if session_id is not None:
