@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
                     player_name varchar(32) not null,
                     num_ships char(1) check (num_ships in ('1', '2', '3', '4' ,'5')),
                     session_started timestamp not null default current_timestamp, 
-                    session_used timestamp
+                    session_used timestamp not null default current_timestamp
                 );
                 
                 CREATE OR REPLACE FUNCTION update_player_slot_in_use()

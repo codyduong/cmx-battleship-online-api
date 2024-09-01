@@ -11,7 +11,12 @@ from user_session.models import LoginRequest
 def get_online_player_count() -> int:
     count: int
     with connections.cursor() as db:
-        db.execute("select count(player_id) as online_player_count from player_slot where in_use = 'Y'")
+        db.execute("""
+            -- delete unused rows
+            delete from user_session where session_used not between NOW() - INTERVAL '10 MINUTES' AND NOW();
+            -- and count remaining players
+            select count(player_id) as online_player_count from player_slot where in_use = 'Y';
+        """)
         count = db.fetchone()['online_player_count']
 
     return count
