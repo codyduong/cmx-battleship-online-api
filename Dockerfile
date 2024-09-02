@@ -15,6 +15,8 @@ FROM --platform=x86-64 python:3.12-alpine
 # create and move to directory /app to store artifacts
 WORKDIR /app
 
+ENV DJANGO_SETTINGS_MODULE app.prod
+
 # copy into /app folder
 COPY src/ ./src/
 COPY default.properties .
@@ -32,7 +34,7 @@ RUN --mount=type=secret,id=AWS_ACCESS_KEY_ID \
 RUN pip install .
 
 # set entrypoint (command which will run when container is started)
-CMD ["DJANGO_SETTINGS_MODULE=app.prod", "gunicorn", "-b", "0.0.0.0:8000", "--chdir", "/app", "app.wsgi"]
+CMD ["gunicorn", "-b", "0.0.0.0:8000", "--chdir", "/app", "app.wsgi"]
 
 # expose appropriate API port
 EXPOSE 8000
