@@ -32,7 +32,7 @@ RUN --mount=type=secret,id=AWS_ACCESS_KEY_ID \
 RUN pip install .
 
 # set entrypoint (command which will run when container is started)
-CMD ["gunicorn", "-b", "0.0.0.0:8000", "--chdir", "/app", "app.wsgi"]
+CMD ["DJANGO_SETTINGS_MODULE=app.prod", "gunicorn", "-b", "0.0.0.0:8000", "--chdir", "/app", "app.wsgi"]
 
 # expose appropriate API port
 EXPOSE 8000

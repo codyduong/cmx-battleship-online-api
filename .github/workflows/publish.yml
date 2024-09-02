@@ -68,7 +68,7 @@ jobs:
         
         pip install .
         ./src/manage.py check
-        ./src/manage.py test core game lobby user_session --settings='app.test.settings'
+        ./src/manage.py test core game lobby user_session --settings='app.test'
         
         deactivate
         

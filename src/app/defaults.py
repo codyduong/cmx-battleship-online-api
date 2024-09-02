@@ -18,15 +18,12 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 # Step 1)
 # required deps
 import os
-
 from pathlib import Path
 from dotenv import load_dotenv
 
 # Step 2)
 # set default properties
 load_dotenv('default.properties')
-# and load secrets to ENV
-load_dotenv('secrets.properties')
 
 # Step 3)
 # setup django for rest application
@@ -97,6 +94,7 @@ LOGGING = {
 
 WSGI_APPLICATION = 'app.wsgi.application'
 
+SECRET_KEY = os.getenv('SECRET_KEY')
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -112,35 +110,3 @@ DATABASES = {
         'PORT': os.getenv('DB_PORT'),
     }
 }
-
-# Step 5)
-# Env specific settings
-RUNTIME_ENVIRONMENT = os.getenv('RUNTIME_ENVIRONMENT') or "prod"
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False if RUNTIME_ENVIRONMENT == "prod" else True
-
-# Step 5.1)
-# Security Setup
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
-# Include below to enable authentication and permission checks on every endpoint
-# REST_FRAMEWORK = {
-#     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
-#     'DEFAULT_AUTHENTICATION_CLASSES': ('app.authentication.PlayerAuthentication',),
-# }
-CORS_EXPOSE_HEADERS = ["session-id", "content-type", "content-length"]
-CORS_ALLOW_HEADERS = CORS_EXPOSE_HEADERS
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
-    'http://localhost:4200',
-    'https://www.morriswa.org',
-]
-ALLOWED_HOSTS = ['*']
-CORS_ALLOW_METHODS = (
-    "GET",
-    "POST",
-    "PUT",
-    "DELETE",
-    "OPTIONS",
-)

@@ -5,7 +5,6 @@ from typing import override
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
 
-from app import connections
 import user_session.daos as user_session_dao
 
 
