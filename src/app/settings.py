@@ -22,13 +22,11 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-
 # Step 2)
 # set default properties
 load_dotenv('default.properties')
 # and load secrets to ENV
 load_dotenv('secrets.properties')
-
 
 # Step 3)
 # setup django for rest application
@@ -41,7 +39,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     # api modules
-    'db',
+    'core',
     'user_session',
     'lobby',
     'game',
@@ -102,7 +100,6 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Step 4)
 # Init data sources
 DATABASES = {
@@ -116,14 +113,12 @@ DATABASES = {
     }
 }
 
-
 # Step 5)
 # Env specific settings
-RUNTIME_ENVIRONMENT = os.getenv('RUNTIME_ENVIRONMENT') or "prod";
-
+RUNTIME_ENVIRONMENT = os.getenv('RUNTIME_ENVIRONMENT') or "prod"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False if RUNTIME_ENVIRONMENT=="prod" else True
+DEBUG = False if RUNTIME_ENVIRONMENT == "prod" else True
 
 # Step 5.1)
 # Security Setup

@@ -12,6 +12,7 @@ pyvenv.cfg
 **/__pycache__/
 **.egg-info
 build/
+testdb
 
 ### secrets ###
 secrets.properties

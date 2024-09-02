@@ -42,16 +42,16 @@
       ./src/manage.py runserver
 
 ## Django Migrate Guide
-please note all database scripts are located in src/db/migrations 
+please note all database scripts are located in src/core/migrations 
 and all sql commands are stored in src/*/daos.py 
 
 - Reset app database
 
-      ./src/manage.py migrate db zero
+      ./src/manage.py migrate core zero
 - Migrate app database to specific version 
   (replace xxxx with migration code eg 0001, 0002, etc) 
 
-      ./src/manage.py migrate db xxxx
+      ./src/manage.py migrate core xxxx
 
 - Migrate app database to latest version
 

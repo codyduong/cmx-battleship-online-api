@@ -1,22 +1,20 @@
 
 # Step 1)
 # required deps
-import os
-from dotenv import load_dotenv
+from app.settings import *
+
 
 # Step 2)
 # set test properties
-load_dotenv('test.properties')
+load_dotenv('test.properties', override=True)
+# BASE_DIR = Path(__file__).resolve().parent.parent
+TEST_RUNNER = 'app.test.runner.NoDbTestRunner'
 
 # Step 3)
 # test settings
 DATABASES = {
     'default': {
         'ENGINE': os.getenv('DB_ENGINE'),
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT'),
+        'NAME': os.getenv('DB_NAME')
     }
 }
