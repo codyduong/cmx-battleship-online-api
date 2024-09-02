@@ -40,3 +40,11 @@ class MatchRequestView(SessionView):
         lobby_dao.accept_match_request(game_request_id, current_player_id, request_player_id)
         return Response(status = 204)
 
+class GameStatusView(SessionView):
+    @staticmethod 
+    def get(request:Request) -> Response:
+        player_one_id = request.user.get('player_one_id')
+        player_two_id = request.user.get('player_two_id')
+        game_expiration = request.user.get('game_expiration') 
+        game_phase = 
+        game_state = 
