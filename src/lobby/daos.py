@@ -49,3 +49,17 @@ def get_available_players() -> list[AvailablePlayerResponse]:
         """)
         results = db.fetchall()
         return [AvailablePlayerResponse(result) for result in results]
+
+def accept_match_request(game_request_id: int, current_player_id: str, request_player_id):
+
+    with connections.cursor() as db:
+        db.execute("""
+            select * 
+            from player_slot slots
+            left join user_session us
+            on slots.player_id = us.player_id
+            where slots.in_use = 'Y'
+            and us.session_used between NOW() - INTERVAL '10 MINUTES' AND NOW();
+        """)
+        results = db.fetchall()
+        return [AvailablePlayerResponse(result) for result in results]
