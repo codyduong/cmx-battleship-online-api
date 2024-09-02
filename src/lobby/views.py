@@ -27,3 +27,16 @@ class GameRequestView(SessionView):
         requested_player_id = request.data.get('player_id')
         lobby_dao.create_game_request(current_player_id, requested_player_id)
         return Response(status = 204)
+    
+
+
+class MatchRequestView(SessionView):
+
+    @staticmethod
+    def post(request: Request) -> Response:
+        game_request_id = request.query.get('gameRequestId')
+        current_player_id = request.user.player_id
+        request_player_id = request.data.get('player_id')
+        lobby_dao.accept_match_request(game_request_id, current_player_id, request_player_id)
+        return Response(status = 204)
+
