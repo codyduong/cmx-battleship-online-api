@@ -31,6 +31,7 @@ class Migration(migrations.Migration):
                     END LOOP;
                 END $$;
                 
+                -- kevin rivers
                 create table user_session (
                     session_id uuid primary key default gen_random_uuid(), 
                     player_id char(4) not null unique references player_slot (player_id),

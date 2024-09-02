@@ -80,7 +80,7 @@ def start_session(session: LoginRequest) -> dict:
         logging.error('error on start_session', e)
 
 
-def end_session(session_id: uuid) -> dict:
+def end_session(session_id: uuid) -> None:
     try:
         with connections.cursor() as db:
             db.execute("""
