@@ -17,15 +17,15 @@ Including another URLconf
 
 from django.urls import path
 
-import app.views as app_views
+import core.views as core_views
 import user_session.views as user_session_views
 import lobby.views as lobby_views
 
 
 urlpatterns = [
     # core app
-    path('health', app_views.health),
-    path('shealth', app_views.shealth),
+    path('health', core_views.health),
+    path('shealth', core_views.shealth),
     # user session
     path('info', user_session_views.get_online_player_count),
     path('login', user_session_views.create_session_login),
