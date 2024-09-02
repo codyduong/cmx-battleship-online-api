@@ -5,7 +5,7 @@ import datetime
 
 from app import connections
 from django.db import IntegrityError
-from lobby.models import GameRequest
+from lobby.models import GameRequest, AvailablePlayerResponse
 
 
 def get_game_requests(player_id: str) -> list[GameRequest]:
@@ -36,3 +36,16 @@ def create_game_request(current_player_id: str, requested_player_id: str):
             INSERT INTO game_request (player_invite_from, player_invite_to) 
             VALUES (%s,%s)
         """, (current_player_id, requested_player_id,))
+
+def get_available_players() -> list[AvailablePlayerResponse]:
+    with connections.cursor() as db:
+        db.execute("""
+            select * 
+            from player_slot slots
+            left join user_session us
+            on slots.player_id = us.player_id
+            where slots.in_use = 'Y'
+            and us.session_used between NOW() - INTERVAL '10 MINUTES' AND NOW();
+        """)
+        results = db.fetchall()
+        return [AvailablePlayerResponse(result) for result in results]

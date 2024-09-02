@@ -2,8 +2,14 @@ import logging
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from app.views import SessionView
+from app.views import SessionView, session_view
 import lobby.daos as lobby_dao
+
+
+@session_view(['GET'])
+def get_available_players(request: Request) -> Response:
+    players = lobby_dao.get_available_players()
+    return Response(status=200, data=[player.json() for player in players])
 
 
 

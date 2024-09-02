@@ -31,5 +31,6 @@ urlpatterns = [
     path('login', user_session_views.create_session_login),
     path('logout', user_session_views.destory_session_logout),
     # lobby
+    path('games', lobby_views.get_available_players),
     path('game/requests', lobby_views.GameRequestView.as_view())
 ]

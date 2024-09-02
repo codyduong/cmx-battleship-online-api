@@ -24,3 +24,26 @@ class GameRequest(DataModel):
             'player_id': self.player_id,
             'player_name': self.player_name
         }
+
+class AvailablePlayerResponse(DataModel):
+    def __init__(self,data:dict):
+        self.player_id: str = data.get('player_id')
+        self.player_name: str = data.get('player_name')
+
+        if self.player_id is None:
+            raise Exception('player_id cannot be None')
+
+        if self.player_name is None:
+            raise Exception('player_name cannot be None')
+
+    @override
+    def validate(self): pass
+    @override
+    def copy(self, data: dict): pass
+
+    @override
+    def json(self):
+        return{
+            'player_id': self.player_id,
+            'player_name': self.player_name
+        }
