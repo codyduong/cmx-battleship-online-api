@@ -6,7 +6,7 @@ class Migration(migrations.Migration):
     creates the game session
     :author Timothy Holmes
     """
-    dependencies = [(('db', '0002_create_game_request'))]
+    dependencies = [(('core', '0002_create_game_request'))]
     operations = [
         migrations.RunSQL(
             sql="""create table game_session (

@@ -30,6 +30,18 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres
+
+        env:
+          POSTGRES_PASSWORD: testpassword
+          POSTGRES_USER: testuser
+          POSTGRES_DB: testdb
+
+        ports:
+          - 5432:5432
+
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-python@v5
