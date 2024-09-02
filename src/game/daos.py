@@ -4,7 +4,6 @@ from app import connections
 
 def init_move(state: object):
     try:
-        print('hi')
         with connections.cursor() as db:
             db.execute("""select state
                        from game_session
