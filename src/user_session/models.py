@@ -3,7 +3,7 @@ import uuid
 from datetime import datetime
 from typing import Optional, override
 
-from django_utils_morriswa.exceptions import ValidationException
+from django_utils_morriswa.exceptions import ValidationException, APIException
 from django_utils_morriswa.models import DataModel
 from django_utils_morriswa.str_tools import isBlank
 
@@ -13,6 +13,30 @@ USER_SESSION_PLAYER_NAME_MIN_LEN = 4
 USER_SESSION_PLAYER_NAME_MAX_LEN = 32
 USER_SESSION_PLAYER_NAME_REGEXP = '^[A-Za-z0-9-_.]*$'
 USER_SESSION_NUM_SHIPS_OPTIONS = ['1', '2', '3', '4', '5']
+
+
+class AuthenticatedPlayer:
+    """ model for authenticated player in database """
+    def __init__(self, data:dict):
+        self.session_id = data.get('session_id')
+        self.player_id = data.get('player_id')
+        self.player_name = data.get('player_name')
+        self.session_started = data.get('session_started')
+
+        if self.session_id is None:
+            raise APIException('session_id required')
+
+        if self.player_id is None:
+            raise APIException('player_id required')
+
+        if self.player_name is None:
+            raise APIException('player_name required')
+
+        if self.session_started is None:
+            raise APIException('session_started required')
+
+        self.is_authenticated = True
+
 
 
 class LoginRequest(DataModel):

@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 # Hello World!
 
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # Step 1)
 # required deps
@@ -27,7 +29,6 @@ load_dotenv('default.properties')
 # and load secrets to ENV
 load_dotenv('secrets.properties')
 
-RUNTIME_ENVIRONMENT = os.getenv('RUNTIME_ENVIRONMENT') or "prod";
 
 # Step 3)
 # setup django for rest application
@@ -118,9 +119,8 @@ DATABASES = {
 
 # Step 5)
 # Env specific settings
+RUNTIME_ENVIRONMENT = os.getenv('RUNTIME_ENVIRONMENT') or "prod";
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False if RUNTIME_ENVIRONMENT=="prod" else True
@@ -129,11 +129,11 @@ DEBUG = False if RUNTIME_ENVIRONMENT=="prod" else True
 # Security Setup
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY")
+# Include below to enable authentication and permission checks on every endpoint
 # REST_FRAMEWORK = {
 #     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
 #     'DEFAULT_AUTHENTICATION_CLASSES': ('app.authentication.PlayerAuthentication',),
 # }
-# JWT_AUTH = {}
 CORS_EXPOSE_HEADERS = ["session-id", "content-type", "content-length"]
 CORS_ALLOW_HEADERS = CORS_EXPOSE_HEADERS
 CORS_ALLOWED_ORIGINS = [

@@ -26,8 +26,10 @@ urlpatterns = [
     # core app
     path('health', app_views.health),
     path('shealth', app_views.shealth),
+    # user session
     path('info', user_session_views.get_online_player_count),
     path('login', user_session_views.create_session_login),
     path('logout', user_session_views.destory_session_logout),
+    # lobby
     path('game/requests', lobby_views.GameRequestView.as_view())
 ]

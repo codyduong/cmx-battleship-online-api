@@ -16,7 +16,11 @@ FROM --platform=x86-64 python:3.12-alpine
 WORKDIR /app
 
 # copy into /app folder
-COPY . .
+COPY ./src .
+COPY ./default.properties .
+COPY ./setup.py .
+COPY ./pyproject.toml .
+
 RUN pip install awscli
 RUN --mount=type=secret,id=AWS_ACCESS_KEY_ID \
     --mount=type=secret,id=AWS_SECRET_ACCESS_KEY \

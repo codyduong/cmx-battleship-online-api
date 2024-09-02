@@ -11,13 +11,16 @@ class Migration(migrations.Migration):
         migrations.RunSQL(
             sql="""create table game_session (
                 game_id uuid primary key, 
-                player_one_id char(4) not null unique, 
-                palyer_two_id char(4) not null unique,
-                active_turn char(3) not null check (active_turn in ('one', 'two')),
+                player_one_id char(4) not null unique 
+                    references user_session (player_id)
+                    on delete cascade,
+                player_two_id char(4) not null unique
+                    references user_session (player_id)
+                    on delete cascade, 
+                active_turn char(2) not null check (active_turn in ('P1', 'P2')),
                 num_ships char(1) not null check (num_ships in ('1', '2', '3', '4', '5')),
                 game_started timestamp not null default current_timestamp,
-                game_expiration timestamp not null,
-                game_phase char(5) not null check (game_phase in ('SELECT','P1WIN','P2WIN', 'NOWIN'))
+                game_phase char(5) not null check (game_phase in ('SELCT','GOODG','P1WIN','P2WIN','NOWIN'))
             );
             """,
             reverse_sql="""

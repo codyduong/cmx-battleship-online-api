@@ -12,12 +12,14 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RunSQL(
             sql="""
+                -- William morris
                 create table player_slot (
                     player_id char(4) not null unique,
                     in_use char(1) not null check (in_use in ('Y', 'N'))
                 );
                 
                 -- Insert all possible player_id values from '0000' to '9999'
+                -- William morris 
                 DO $$
                 DECLARE
                     i INTEGER;
@@ -29,15 +31,17 @@ class Migration(migrations.Migration):
                     END LOOP;
                 END $$;
                 
+                -- kevin rivers
                 create table user_session (
                     session_id uuid primary key default gen_random_uuid(), 
                     player_id char(4) not null unique references player_slot (player_id),
                     player_name varchar(32) not null,
                     num_ships char(1) check (num_ships in ('1', '2', '3', '4' ,'5')),
                     session_started timestamp not null default current_timestamp, 
-                    session_used timestamp
+                    session_used timestamp not null default current_timestamp
                 );
                 
+                -- William morris
                 CREATE OR REPLACE FUNCTION update_player_slot_in_use()
                 RETURNS TRIGGER AS $$
                 BEGIN

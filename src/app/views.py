@@ -5,10 +5,12 @@ from rest_framework.decorators import permission_classes, authentication_classes
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from django_utils_morriswa.view_utils import unsecured, w_view, WView
+from django_utils_morriswa.view_utils import w_view, WView
 
 
 class AnyView(WView):
+    """ inherit this class to create a view for unsecured requests
+     includes error handling from morriswa package"""
     authentication_classes = []
     permission_classes = []
 
@@ -29,6 +31,8 @@ def any_view(methods):
 
 
 class SessionView(WView):
+    """ inherit this class to create a view for session requests
+         includes error handling from morriswa package"""
     authentication_classes = [app.authentication.PlayerAuthentication]
     permission_classes = [rest_framework.permissions.IsAuthenticated]
 
@@ -50,6 +54,7 @@ def session_view(methods):
 
 @any_view(['GET'])
 def health(request):
+    """ health endpoint to test any_view """
     return Response({
         "msg": "hello world!"
     }, status=200)
@@ -57,6 +62,7 @@ def health(request):
 
 @session_view(['GET'])
 def shealth(request):
+    """ health endpoint to test session_view """
     return Response({
         "msg": f"hello {request.user.player_name}#{request.user.player_id}"
     }, status=200)

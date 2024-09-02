@@ -40,3 +40,19 @@
 - Run on local machine http://localhost:8000
       
       ./src/manage.py runserver
+
+## Django Migrate Guide
+please note all database scripts are located in src/db/migrations 
+and all sql commands are stored in src/*/daos.py 
+
+- Reset app database
+
+      ./src/manage.py migrate db zero
+- Migrate app database to specific version 
+  (replace xxxx with migration code eg 0001, 0002, etc) 
+
+      ./src/manage.py migrate db xxxx
+
+- Migrate app database to latest version
+
+      ./src/manage.py migrate 
