@@ -16,7 +16,7 @@ FROM --platform=x86-64 python:3.12-alpine
 WORKDIR /app
 
 # copy into /app folder
-COPY src .
+COPY src/ ./src/
 COPY default.properties .
 COPY setup.py .
 COPY pyproject.toml .
