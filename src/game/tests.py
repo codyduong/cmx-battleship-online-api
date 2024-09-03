@@ -4,7 +4,7 @@ from django.conf import settings
 
 from django_utils_morriswa.exceptions import ValidationException, BadRequestException
 
-from game.models import GameBoard, GameState
+from game.models import GameBoard, GameState, Play
 
 class GameBoardModelTest(TestCase):
 
@@ -160,7 +160,7 @@ class GameStateModelTest(TestCase):
         state = GameState(json)
         self.assertEqual(state.p1_attacks[0], 'A1', 'should match json')
         self.assertEqual(state.p1_board.ship_1[0], 'C1', 'should match json')
-        response = state.recordPlay('p1', 'D1')
+        response = state.recordPlay('p1', Play({'tile_id':'D1'}))
         self.assertEqual(response.hit_tile_ids, ['D1'], 'D1 was hit')
         self.assertEqual(state.getState('p1').hit_tile_ids, ['D1'], 'D1 was hit')
 
@@ -179,7 +179,7 @@ class GameStateModelTest(TestCase):
            }"""
 
         state = GameState(json)
-        response = state.recordPlay('p1','D1')
+        response = state.recordPlay('p1',Play({'tile_id':'D1'}))
         self.assertEqual(response.hit_tile_ids, ['D1'], 'D1 was hit')
         self.assertEqual(response.miss_tile_ids, ['A1'], 'A1 was miss')
         self.assertEqual(state.getState('p1').hit_tile_ids, ['D1'], 'D1 was hit')
@@ -221,7 +221,7 @@ class GameStateModelTest(TestCase):
            }"""
 
         state = GameState(json)
-        response = state.recordPlay('p1','D1')
+        response = state.recordPlay('p1',Play({'tile_id':'D1'}))
         self.assertEqual(response.hit_tile_ids, ['D1'], 'D1 was hit')
         self.assertEqual(response.miss_tile_ids, ['A1'], 'A1 was miss')
         self.assertEqual(state.getState('p1').hit_tile_ids, ['D1'], 'D1 was hit')
