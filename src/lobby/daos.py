@@ -52,18 +52,23 @@ def get_game_requests(player_id: str) -> list[GameRequest]:
 
         return [GameRequest(data) for data in db_result]
         
-def create_game_request(current_player_id: str, requested_player_id: str):
+def create_game_request(player_invite_from: str, player_invite_to: str):
 
     with connections.cursor() as db:
         db.execute("""
-            insert into game_request (player_invite_from, player_invite_to) 
-            VALUES (%s,%s);
-            
-            delete from game_session
-            where 
-                player_one_id = %s or player_two_id = %s
-                or player_one_id = %s or player_two_id = %s
-        """, (current_player_id, requested_player_id, current_player_id, requested_player_id, requested_player_id, current_player_id))
+            do$$
+            declare
+                var_player_invite_from char(4) := %s;
+                var_player_invite_to char(4) := %s;
+            begin
+                insert into game_request (player_invite_from, player_invite_to) 
+                VALUES (var_player_invite_from, var_player_invite_to);
+                
+                delete from game_session
+                where 
+                    player_one_id = var_player_invite_from or player_two_id = var_player_invite_from;
+            end$$;
+        """, (player_invite_from, player_invite_to,))
 
 def accept_match_request(player_id: int, game_request_id: int):
 
