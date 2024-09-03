@@ -23,15 +23,20 @@ def other_player(player: Player) -> Player:
 
 
 class GameStateResponse:
-    def __init__(self, hit_tile_ids: list[str], miss_tile_ids: list[str], enemy_ships_remaining: int):
+    def __init__(self, hit_tile_ids: list[str], miss_tile_ids: list[str], board: GameBoard, enemy_ships_remaining: int):
         self.hit_tile_ids = hit_tile_ids
         self.miss_tile_ids = miss_tile_ids
+        self.board = board
         self.enemy_ships_remaining = enemy_ships_remaining
+
+        if board is None:
+            raise ValueError('board is always required')
 
     def json(self):
         return {
             'hit_tile_ids': self.hit_tile_ids,
             'miss_tile_ids': self.miss_tile_ids,
+            'board': self.board.json(),
             'enemy_ships_remaining': self.enemy_ships_remaining,
         }
 
@@ -40,8 +45,8 @@ class GameStateResponse:
 class GameState:
     def __init__(self, json_data: str):
         json_obj = json.loads(json_data)
-        self.p1_attacks: list[str] = json_obj.get('p1_attacks')
-        self.p2_attacks: list[str] = json_obj.get('p2_attacks')
+        self.p1_attacks: list[str] = json_obj.get('p1_attacks') or []
+        self.p2_attacks: list[str] = json_obj.get('p2_attacks') or []
 
         p1boardState = json_obj.get('p1_board')
         p2boardState = json_obj.get('p2_board')
@@ -54,14 +59,8 @@ class GameState:
 
 
     # getters
-    def getState(self, player: Player) -> Optional[GameStateResponse]:
-        if (    self.p1_board is not None
-            and self.p2_board is not None
-            and self.p1_attacks is not None
-            and self.p2_attacks is not None
-        ):
-            return self._get_state(player)
-        return None
+    def getState(self, player: Player) -> GameStateResponse:
+        return self._get_state(player)
 
     def json(self) -> dict:
 
@@ -107,9 +106,23 @@ class GameState:
 
     # internal
     def _get_state(self, player: str):
-        player_attacks = getattr(self, f'{player}_attacks')
 
         other_player = 'p1' if player == 'p2' else 'p2'
+
+        player_board: Optional[GameBoard] = getattr(self, f'{player}_board') \
+            if getattr(self, f'{player}_board') is not None else None
+
+        if (   self.p1_board is None
+            or self.p2_board is None
+            or self.p1_attacks is None
+            or self.p2_attacks is None
+        ):
+            if player_board is not None:
+                return GameStateResponse(None, None, player_board, None)
+            else: return None
+
+        player_attacks = getattr(self, f'{player}_attacks')
+        player_board = getattr(self, f'{player}_board')
         other_player_board: GameBoard = getattr(self, f'{other_player}_board')
 
         hit_tile_ids = [tile_id
@@ -125,14 +138,14 @@ class GameState:
         enemy_ships_remaining = 0
         for ship in other_player_board.ships():
             sunk = True
-            for tile_id in hit_tile_ids:
-                if tile_id not in ship:
+            for tile_id in ship:
+                if tile_id not in hit_tile_ids:
                     sunk = False
 
             if not sunk:
                 enemy_ships_remaining += 1
 
-        return GameStateResponse(hit_tile_ids, miss_tile_ids, enemy_ships_remaining)
+        return GameStateResponse(hit_tile_ids, miss_tile_ids, player_board, enemy_ships_remaining)
 
     def _record_play(self, player, tile_id: str):
         ensure_valid_tile_id(tile_id)

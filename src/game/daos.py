@@ -30,11 +30,13 @@ def submit_move(game_session: ActiveGameSession) -> ActiveGameSession:
             set
                 game_state = %s,
                 active_turn = %s,
+                game_phase = %s,
                 last_play = current_timestamp
             where game_id = %s;
         """, (
             json.dumps(game_session.game_state.json()),
             game_session.active_turn,
+            game_session.game_phase,
             game_session.game_id,
         ))
 
