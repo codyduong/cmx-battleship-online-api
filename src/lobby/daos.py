@@ -56,7 +56,7 @@ def create_game_request(player_invite_from: str, player_invite_to: str):
 
     with connections.cursor() as db:
         db.execute("""
-            do$$
+            do $$
             declare
                 var_player_invite_from char(4) := %s;
                 var_player_invite_to char(4) := %s;
