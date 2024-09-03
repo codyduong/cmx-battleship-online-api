@@ -66,8 +66,8 @@ class GameState:
         json_str = {
             'p1_attacks': self.p1_attacks,
             'p2_attacks': self.p2_attacks,
-            'p1_board': self.p1_board.json(),
-            'p2_board': self.p2_board.json()
+            'p1_board': self.p1_board.json() if self.p1_board is not None else None,
+            'p2_board': self.p2_board.json() if self.p1_board is not None else None,
         }
         logging.info(f'saved state as {json_str}')
 

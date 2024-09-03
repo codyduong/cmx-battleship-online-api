@@ -26,8 +26,8 @@ def make_initial_move(request: Request) -> Response:
     if game_session.game_phase != 'selct':
         raise BadRequestException('you are no longer able to place or move ships!')
 
+    game_state: GameState = game_session.game_state
     game_state.setBoard(player_one_or_two, initial_move)
-
     if game_state.all_ships_placed():
         game_session.game_phase = 'goodg'
         game_session.active_turn = other_player(player_one_or_two)
@@ -35,7 +35,7 @@ def make_initial_move(request: Request) -> Response:
     # game_session.game_state = game_state
     game_dao.submit_move(game_session)
 
-    return Response(status=200, data=response)
+    return Response(status=204)
 
 
 class ActiveGameView(SessionView):

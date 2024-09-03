@@ -1,5 +1,6 @@
 import logging
 import uuid
+import json
 
 from django_utils_morriswa.exceptions import BadRequestException
 
@@ -31,14 +32,10 @@ def submit_move(game_session: ActiveGameSession) -> ActiveGameSession:
                 last_play = current_timestamp
             where game_id = %s;
         """, (
-            game_session.game_state.json(),
+            json.dumps(game_session.game_state.json()),
             game_session.active_turn,
             game_session.game_id,
         ))
-        result = db.fetchone()
-        if result is None:
-            raise BadRequestException('failed to locate game session')
-        return GameSession(result)
 
 
 def forfeit_game(session_id: uuid):
