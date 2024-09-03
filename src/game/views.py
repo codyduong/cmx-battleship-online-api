@@ -108,7 +108,7 @@ class ActiveGameView(SessionView):
         # game_session.game_state = game_state
         game_dao.submit_move(game_session)
 
-        return Response(status=200, data=response)
+        return Response(status=200, data=response.json())
 
     @staticmethod
     def delete(request: Request) -> Response:

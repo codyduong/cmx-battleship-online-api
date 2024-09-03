@@ -20,9 +20,10 @@ def other_player(player: Player) -> Player:
 
 
 class GameStateResponse:
-    def __init__(self, hit_tile_ids: list[str], miss_tile_ids: list[str], board: GameBoard, enemy_ships_remaining: int):
+    def __init__(self, hit_tile_ids: list[str], miss_tile_ids: list[str], my_hit_tile_ids: list[str], board: GameBoard, enemy_ships_remaining: int):
         self.hit_tile_ids = hit_tile_ids
         self.miss_tile_ids = miss_tile_ids
+        self.my_hit_tile_ids = my_hit_tile_ids
         self.board = board
         self.enemy_ships_remaining = enemy_ships_remaining
 
@@ -33,6 +34,7 @@ class GameStateResponse:
         return {
             'hit_tile_ids': self.hit_tile_ids,
             'miss_tile_ids': self.miss_tile_ids,
+            'my_hit_tile_ids': self.my_hit_tile_ids,
             'board': self.board.json(),
             'enemy_ships_remaining': self.enemy_ships_remaining,
         }
@@ -115,12 +117,13 @@ class GameState:
             or self.p2_attacks is None
         ):
             if player_board is not None:
-                return GameStateResponse(None, None, player_board, None)
+                return GameStateResponse(None, None, None, player_board, None)
             else: return None
 
         player_attacks = getattr(self, f'{player}_attacks')
         player_board = getattr(self, f'{player}_board')
         other_player_board: GameBoard = getattr(self, f'{other_player}_board')
+        other_player_attacks: list[str] = getattr(self, f'{other_player}_attacks')
 
         hit_tile_ids = [tile_id
             for tile_id in player_attacks
@@ -130,6 +133,11 @@ class GameState:
         miss_tile_ids = [tile_id
             for tile_id in player_attacks
             if tile_id not in hit_tile_ids
+        ]
+
+        my_hit_tile_ids = [tile_id
+            for tile_id in other_player_attacks
+            if tile_id in player_board.all_tiles()
         ]
 
         enemy_ships_remaining = 0
@@ -142,7 +150,7 @@ class GameState:
             if not sunk:
                 enemy_ships_remaining += 1
 
-        return GameStateResponse(hit_tile_ids, miss_tile_ids, player_board, enemy_ships_remaining)
+        return GameStateResponse(hit_tile_ids, miss_tile_ids, my_hit_tile_ids, player_board, enemy_ships_remaining)
 
     def _record_play(self, player: Player, tile_id: str):
         ensure_valid_tile_id(tile_id)
