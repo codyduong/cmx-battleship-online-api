@@ -11,14 +11,16 @@ import game.daos as game_dao
 @session_view(['POST'])
 def make_initial_move(request: Request) -> Response:
 
-    initial_move = GameBoard(request.data)
+    initial_move: GameBoard = GameBoard(request.data)
 
     game_session: ActiveGameSession = game_dao.retrieve_active_game_session(request.user.player_id)
 
+    logging.info(f'current login {request.user.player_id}')
+    logging.info(f'p1: {game_session.player_one_id}, p2: {game_session.player_two_id}')
     player_one_or_two: Player
     if game_session.player_one_id == request.user.player_id:
         player_one_or_two = 'p1'
-    if game_session.player_two_id == request.user.player_id:
+    elif game_session.player_two_id == request.user.player_id:
         player_one_or_two = 'p2'
     else:
         raise APIException('should only pull valid sessions...')
@@ -27,10 +29,13 @@ def make_initial_move(request: Request) -> Response:
         raise BadRequestException('you are no longer able to place or move ships!')
 
     game_state: GameState = game_session.game_state
-    game_state.setBoard(player_one_or_two, initial_move)
+    game_state.set_board(player_one_or_two, initial_move)
+
     if game_state.all_ships_placed():
         game_session.game_phase = 'goodg'
         game_session.active_turn = other_player(player_one_or_two)
+
+
 
     # game_session.game_state = game_state
     game_dao.submit_move(game_session)

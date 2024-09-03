@@ -11,12 +11,16 @@ from .validation import ensure_valid_tile_id
 PLAYER_ONE = 'p1'
 PLAYER_TWO = 'p2'
 type Player = PLAYER_ONE | PLAYER_TWO
+
+
 def other_player(player: Player) -> Player:
     if player == PLAYER_ONE:
         return PLAYER_TWO
     if player == PLAYER_TWO:
         return PLAYER_ONE
     else: raise ValueError(f'invalid player {player}')
+
+
 
 class GameStateResponse:
     def __init__(self, hit_tile_ids: list[str], miss_tile_ids: list[str], enemy_ships_remaining: int):
@@ -63,13 +67,16 @@ class GameState:
 
         self.validate()
 
-        json_str = {
+        json_str: dict = {
             'p1_attacks': self.p1_attacks,
             'p2_attacks': self.p2_attacks,
-            'p1_board': self.p1_board.json() if self.p1_board is not None else None,
-            'p2_board': self.p2_board.json() if self.p1_board is not None else None,
         }
-        logging.info(f'saved state as {json_str}')
+
+        if self.p1_board is not None:
+            json_str['p1_board'] = self.p1_board.json()
+
+        if self.p2_board is not None:
+            json_str['p2_board'] = self.p2_board.json()
 
         return json_str
 
@@ -78,11 +85,12 @@ class GameState:
 
 
     # setters
-    def setBoard(self, player: Player, valid_board: GameBoard):
+    def set_board(self, player: Player, valid_board: GameBoard):
         if getattr(self, f'{player}_board') is not None:
             raise BadRequestException('can only place ships once')
 
         setattr(self, f'{player}_board', valid_board)
+        self.validate()
 
     def recordPlay(self, player_id: str, tile_id: str) -> GameStateResponse:
         return self._record_play(player_id, tile_id)

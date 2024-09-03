@@ -1,5 +1,23 @@
 from django_utils_morriswa.exceptions import ValidationException, BadRequestException
 
+
+
+VALID_COLUMNS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
+VALID_ROWS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+
+
+def ensure_valid_tile_id(tile: str) -> (str, str):
+    col = tile[0]
+    row = tile[1::]
+    if col not in VALID_COLUMNS:
+        raise BadRequestException('invalid column identifier')
+
+    if row not in VALID_ROWS:
+        raise BadRequestException('invalid row identifier')
+
+    return (col, row)
+
+
 def ensure_valid_ship_row(ship_len: int, ship_collection: list[str]):
     last_col: str = None
     last_row: str = None
@@ -24,21 +42,3 @@ def ensure_valid_ship_row(ship_len: int, ship_collection: list[str]):
 
             last_col = col
             last_row = row
-
-
-VALID_COLUMNS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
-VALID_ROWS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
-
-
-def ensure_valid_tile_id(tile: str) -> (str, str):
-    col = tile[0]
-    row = tile[1::]
-    if col not in VALID_COLUMNS:
-        raise BadRequestException('invalid column identifier')
-
-    if row not in VALID_ROWS:
-        raise BadRequestException('invalid row identifier')
-
-    return (col, row)
-
-

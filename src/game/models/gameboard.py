@@ -3,7 +3,6 @@ from django_utils_morriswa.exceptions import BadRequestException, ValidationExce
 from .validation import ensure_valid_ship_row
 
 
-
 class GameBoard:
     def __init__(self, json_data: dict):
         self.ship_1 = json_data.get('ship_1')
