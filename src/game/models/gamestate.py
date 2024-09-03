@@ -1,5 +1,6 @@
 import json
 import logging
+from typing import Optional
 
 from django_utils_morriswa.exceptions import BadRequestException
 
@@ -23,6 +24,13 @@ class GameStateResponse:
         self.miss_tile_ids = miss_tile_ids
         self.enemy_ships_remaining = enemy_ships_remaining
 
+    def json(self):
+        return {
+            'hit_tile_ids': self.hit_tile_ids,
+            'miss_tile_ids': self.miss_tile_ids,
+            'enemy_ships_remaining': self.enemy_ships_remaining,
+        }
+
 
 
 class GameState:
@@ -42,8 +50,14 @@ class GameState:
 
 
     # getters
-    def getState(self, player: Player) -> GameStateResponse:
-        return self._get_state(player)
+    def getState(self, player: Player) -> Optional[GameStateResponse]:
+        if (    self.p1_board is not None
+            and self.p2_board is not None
+            and self.p1_attacks is not None
+            and self.p2_attacks is not None
+        ):
+            return self._get_state(player)
+        return None
 
     def json(self) -> dict:
 

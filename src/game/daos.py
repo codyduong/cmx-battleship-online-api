@@ -19,7 +19,7 @@ def retrieve_active_game_session(player_id: str) -> ActiveGameSession:
         result = db.fetchone()
         if result is None:
             raise BadRequestException('failed to locate game session')
-        return GameSession(result)
+        return ActiveGameSession(result)
 
 def submit_move(game_session: ActiveGameSession) -> ActiveGameSession:
     with connections.cursor() as db:

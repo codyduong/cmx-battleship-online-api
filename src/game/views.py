@@ -4,7 +4,7 @@ from rest_framework.response import Response
 
 from django_utils_morriswa.exceptions import APIException, BadRequestException
 from app.views import SessionView, session_view
-from game.models import GameStateResponse, ActiveGameSession, GameState, Player, Play, other_player, GameBoard
+from game.models import GameStateResponse, ActiveGameSession, GameState, Player, Play, PLAYER_ONE, PLAYER_TWO, other_player, GameBoard
 import game.daos as game_dao
 
 
@@ -39,6 +39,29 @@ def make_initial_move(request: Request) -> Response:
 
 
 class ActiveGameView(SessionView):
+
+    @staticmethod
+    def get(request: Request) -> Response:
+        game_session: ActiveGameSession = game_dao.retrieve_active_game_session(request.user.player_id)
+
+        player_one_or_two: Player
+        if game_session.player_one_id == request.user.player_id:
+            player_one_or_two = 'p1'
+        if game_session.player_two_id == request.user.player_id:
+            player_one_or_two = 'p2'
+        else:
+            raise APIException('should only pull valid sessions...')
+
+        game_state: GameState = game_session.game_state
+        game_state_response = game_state.getState(player_one_or_two)
+
+        return Response(status=200, data={
+            'opponent_id': game_session.player_one_id if player_one_or_two == PLAYER_ONE else game_session.player_two_id,
+            'oppenent_name': None,
+            'game_timeout': None,
+            'game_phase': game_session.game_phase,
+            'game_state': game_state_response.json() if game_state_response is not None else None ,
+        })
 
     @staticmethod
     def post(request: Request) -> Response:
