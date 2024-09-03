@@ -47,6 +47,8 @@ class ActiveGameView(SessionView):
     def get(request: Request) -> Response:
         game_session: ActiveGameSession = game_dao.retrieve_active_game_session(request.user.player_id)
 
+        if game_session is None: return Response(status=200)
+
         player_one_or_two: Player
         if game_session.player_one_id == request.user.player_id:
             player_one_or_two = 'p1'

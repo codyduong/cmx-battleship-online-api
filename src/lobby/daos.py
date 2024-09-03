@@ -8,16 +8,25 @@ from django.db import IntegrityError
 from lobby.models import GameRequest, AvailablePlayerResponse
 
 
-def get_available_players() -> list[AvailablePlayerResponse]:
+def get_available_players(session_id: uuid) -> list[AvailablePlayerResponse]:
     with connections.cursor() as db:
         db.execute("""
-            select * 
+            select 
+                slots.player_id,
+                us.player_name
             from player_slot slots
             left join user_session us
             on slots.player_id = us.player_id
-            where slots.in_use = 'Y'
-            and us.session_used between NOW() - INTERVAL '10 MINUTES' AND NOW();
-        """)
+            where 
+                slots.in_use = 'Y'
+                and us.num_ships = (
+                    select num_ships
+                    from user_session
+                    where session_id = %s
+                    limit 1
+                )
+                and us.session_used between NOW() - INTERVAL '10 MINUTES' AND NOW();
+        """, (session_id,))
         results = db.fetchall()
         return [AvailablePlayerResponse(result) for result in results]
 
@@ -57,6 +66,12 @@ def accept_match_request(player_id: int, game_request_id: int):
         db.execute("""
             DO $$
             DECLARE
+                -- inputs
+                param_game_request_id bigint := %s;
+                param_current_player_id char(4) := %s;
+                param_new_game_uuid uuid := %s;
+                
+                -- variables
                 player_invite_from char(4);
                 player_invite_to char(4);
                 num_ships char;
@@ -73,8 +88,9 @@ def accept_match_request(player_id: int, game_request_id: int):
                 left join user_session us 
                     on gr.player_invite_from = us.player_id
                 WHERE 
-                    gr.game_request_id = %s
-                    and gr.player_invite_from = %s or gr.player_invite_to = %s;
+                    gr.game_request_id = param_game_request_id
+                    and gr.player_invite_from = param_current_player_id 
+                    or gr.player_invite_to = param_current_player_id;
                     
                 insert into game_session
                     (game_id,
@@ -82,12 +98,16 @@ def accept_match_request(player_id: int, game_request_id: int):
                      active_turn, num_ships, 
                      game_phase, game_state)
                 values
-                    (%s,
+                    (param_new_game_uuid,
                     player_invite_to, player_invite_from,
                     'p1', num_ships,
                     'selct','{}');
+                    
+                delete from game_request gr
+                where gr.player_invite_from = param_current_player_id
+                or gr.player_invite_to = param_current_player_id;
             END$$;   
-        """, (game_request_id, player_id, player_id, uuid.uuid4()))
+        """, (game_request_id, player_id, uuid.uuid4()))
 
 def request_random_match():
     raise NotImplementedError('please implement me!')

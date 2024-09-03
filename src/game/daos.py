@@ -1,6 +1,7 @@
 import logging
 import uuid
 import json
+from typing import Optional
 
 from django_utils_morriswa.exceptions import BadRequestException
 
@@ -8,7 +9,7 @@ from app import connections
 from .models import ActiveGameSession
 
 
-def retrieve_active_game_session(player_id: str) -> ActiveGameSession:
+def retrieve_active_game_session(player_id: str) -> Optional[ActiveGameSession]:
     with connections.cursor() as db:
         db.execute("""
             select *
@@ -18,9 +19,9 @@ def retrieve_active_game_session(player_id: str) -> ActiveGameSession:
                 or player_two_id = %s
         """, (player_id, player_id,))
         result = db.fetchone()
-        if result is None:
-            raise BadRequestException('failed to locate game session')
-        return ActiveGameSession(result)
+        # if result is None:
+        #     raise BadRequestException('failed to locate game session')
+        return ActiveGameSession(result) if result is not None else None
 
 def submit_move(game_session: ActiveGameSession) -> ActiveGameSession:
     with connections.cursor() as db:

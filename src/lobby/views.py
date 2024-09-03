@@ -8,8 +8,11 @@ import lobby.daos as lobby_dao
 
 @session_view(['GET'])
 def get_available_players(request: Request) -> Response:
-    players = lobby_dao.get_available_players()
-    return Response(status=200, data=[player.json() for player in players])
+    players = lobby_dao.get_available_players(request.user.session_id)
+    return Response(status=200, data=[player.json()
+        for player in players
+        if player.player_id != request.user.player_id
+    ])
 
 
 
