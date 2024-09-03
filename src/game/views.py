@@ -15,8 +15,6 @@ def make_initial_move(request: Request) -> Response:
 
     game_session: ActiveGameSession = game_dao.retrieve_active_game_session(request.user.player_id)
 
-    logging.info(f'current login {request.user.player_id}')
-    logging.info(f'p1: {game_session.player_one_id}, p2: {game_session.player_two_id}')
     player_one_or_two: Player
     if game_session.player_one_id == request.user.player_id:
         player_one_or_two = 'p1'
@@ -52,7 +50,7 @@ class ActiveGameView(SessionView):
         player_one_or_two: Player
         if game_session.player_one_id == request.user.player_id:
             player_one_or_two = 'p1'
-        if game_session.player_two_id == request.user.player_id:
+        elif game_session.player_two_id == request.user.player_id:
             player_one_or_two = 'p2'
         else:
             raise APIException('should only pull valid sessions...')
