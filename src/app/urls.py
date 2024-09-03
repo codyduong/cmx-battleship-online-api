@@ -34,5 +34,6 @@ urlpatterns = [
     # lobby
     path('games', lobby_views.get_available_players),
     path('game/requests', lobby_views.GameRequestView.as_view()),
+    path('game/request/<int:game_request_id>', lobby_views.accept_match_request),
     path('game/active', game_views.ActiveGameView.as_view())
 ]

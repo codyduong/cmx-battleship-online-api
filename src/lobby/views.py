@@ -29,22 +29,7 @@ class GameRequestView(SessionView):
         return Response(status = 204)
     
 
-
-class MatchRequestView(SessionView):
-
-    @staticmethod
-    def post(request: Request) -> Response:
-        game_request_id = request.query.get('gameRequestId')
-        current_player_id = request.user.player_id
-        request_player_id = request.data.get('player_id')
-        lobby_dao.accept_match_request(game_request_id, current_player_id, request_player_id)
-        return Response(status = 204)
-
-class GameStatusView(SessionView):
-    @staticmethod 
-    def get(request:Request) -> Response:
-        player_one_id = request.user.get('player_one_id')
-        player_two_id = request.user.get('player_two_id')
-        game_expiration = request.user.get('game_expiration') 
-        game_phase = 
-        game_state = 
+@session_view(['POST'])
+def accept_match_request(request: Request, game_request_id: int) -> Response:
+    lobby_dao.accept_match_request(request.user.player_id, game_request_id)
+    return Response(status = 204)

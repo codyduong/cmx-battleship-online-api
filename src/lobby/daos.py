@@ -37,21 +37,37 @@ def create_game_request(current_player_id: str, requested_player_id: str):
             VALUES (%s,%s)
         """, (current_player_id, requested_player_id,))
 
-def accept_match_request(game_request_id: int, current_player_id: str, request_player_id):
+def accept_match_request(player_id: int, game_request_id: int):
 
     with connections.cursor() as db:
         db.execute("""
-            insert into game_session (game_id, player_one_id, player_two_id)
-            values (%s,%s,%s)
-        """, (game_request_id, current_player_id, request_player_id))
+            DO$$
+            DECLARE
+                player_invite_from char(4);
+                player_invite_to char(4);
+                num_ships char;
+            BEGIN
+                SELECT 
+                    player_invite_from INTO player_invite_from,
+                    player_invite_to into player_invite_to,
+                    num_ships into num_ships
+                FROM game_request gr
+                left join user_session us on gr.player_invite_from = us.player_id
+                WHERE game_request_id = %s
+                    and player_invite_from = %s or player_invite_to = %s;
+            END$$;
+            
+            insert into game_session
+                (player_one_id, player_two_id,
+                 active_turn,
+                  num_ships, 
+                  game_phase, game_state)
+            values
+                (player_invite_to,player_invite_from,
+                'p1', %s,
+                'selct','{}');
+        """, (game_request_id, player_id, player_id))
 
 def request_random_match():
-    print('TODO')
+    raise NotImplementedError('please implement me!')
 
-def game_status(game_id: int):
-    with connections.cursor() as db:
-        db.execute("""
-            select player_one_id, player_two_id, game_expiration, game_phase, game_state
-                   FROM game_session
-            where game_id = %s
-        """), (game_id)
