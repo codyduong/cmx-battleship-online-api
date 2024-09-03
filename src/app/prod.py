@@ -1,5 +1,7 @@
 from app.defaults import *
 
+from socket import gethostbyname, gethostname
+
 # Add env specific settings
 RUNTIME_ENVIRONMENT = "prod"
 DEBUG = False
@@ -13,7 +15,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:4200',
     'https://www.morriswa.org',
 ]
-ALLOWED_HOSTS = ['cmx-battleship-online-api.f2iq9gqbr52r0.us-east-2.cs.amazonlightsail.com', '0.0.0.0']
+ALLOWED_HOSTS = ['cmx-battleship-online-api.f2iq9gqbr52r0.us-east-2.cs.amazonlightsail.com', gethostbyname(gethostname())]
 CORS_ALLOW_METHODS = (
     "GET",
     "POST",
