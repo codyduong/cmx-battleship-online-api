@@ -14,7 +14,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:4200',
     'https://www.morriswa.org',
 ]
-ALLOWED_HOSTS = ['cmx-battleship-online-api.f2iq9gqbr52r0.us-east-2.cs.amazonlightsail.com', subprocess.check_output(['hostname', '-i'])]
+ALLOWED_HOSTS = ['cmx-battleship-online-api.f2iq9gqbr52r0.us-east-2.cs.amazonlightsail.com', '[::1]']
 CORS_ALLOW_METHODS = (
     "GET",
     "POST",
