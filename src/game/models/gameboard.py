@@ -14,15 +14,12 @@ class GameBoard:
         self.validate()
 
     def all_tiles(self):
-        ship_num: int
         all_tiles = []
         for ship_num in range(1, 6):
             ship_name = f'ship_{ship_num}'
-            current_ship = getattr(self, ship_name)
-
-            if current_ship is None: break
-
-            for tile in current_ship:
+            current_ships = getattr(self, ship_name)
+            if current_ships is None: break
+            for tile in current_ships:
                 all_tiles.append(tile)
 
         return all_tiles
@@ -31,9 +28,9 @@ class GameBoard:
         ships = []
         for ship_num in range(1, 6):
             ship_name = f'ship_{ship_num}'
-            current_ship = getattr(self, ship_name)
-            if current_ship is None: break
-            ships.append(current_ship)
+            current_ships = getattr(self, ship_name)
+            if current_ships is None: break
+            ships.append(current_ships)
 
         return ships
 

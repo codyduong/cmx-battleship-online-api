@@ -52,7 +52,7 @@ class GameState:
         p2boardState = json_obj.get('p2_board')
         self.p1_board: Optional[GameBoard] = GameBoard(p1boardState) \
             if p1boardState is not None else None
-        self.p2_board: Optional[GameState] = GameBoard(p2boardState) \
+        self.p2_board: Optional[GameBoard] = GameBoard(p2boardState) \
             if p2boardState is not None else None
 
         self.validate()
@@ -60,20 +60,14 @@ class GameState:
 
     # getters
     def gen_game_phase(self) -> GamePhase:
-        p1state = self._get_state('p1')
-        p2state = self._get_state('p2')
 
-        if p1state is None or p2state is None:
+        if self.p1_board is None or self.p2_board is None:
             return 'selct'
 
-        if p1state.board is not None and p2state.board is not None:
-            return 'goodg'
-        elif p1state.hit_tile_ids is not None and p2state.hit_tile_ids is not None:
-            if len(p1state.hit_tile_ids) == len(p2state.board.all_tiles()):
-                return 'p1win'
-
-            if len(p2state.hit_tile_ids) == len(p1state.board.all_tiles()):
-                return 'p2win'
+        p1_enemy_ship_counter = self._get_state('p1').enemy_ships_remaining
+        p2_enemy_ship_counter = self._get_state('p2').enemy_ships_remaining
+        if p1_enemy_ship_counter == 0: return 'p1win'
+        if p2_enemy_ship_counter == 0: return 'p2win'
 
         return 'goodg'
 

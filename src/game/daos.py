@@ -53,4 +53,4 @@ def forfeit_game(player_id: str):
             """, (player_id,player_id,))
 
     except Exception as e:
-        logging.error('error on forfeit_game', e)
+        logging.error('error on forfeit_game')
