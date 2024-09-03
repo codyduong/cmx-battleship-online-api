@@ -20,6 +20,7 @@ from django.urls import path
 import core.views as core_views
 import user_session.views as user_session_views
 import lobby.views as lobby_views
+import game.views as game_views
 
 
 urlpatterns = [
@@ -32,5 +33,6 @@ urlpatterns = [
     path('logout', user_session_views.destory_session_logout),
     # lobby
     path('games', lobby_views.get_available_players),
-    path('game/requests', lobby_views.GameRequestView.as_view())
+    path('game/requests', lobby_views.GameRequestView.as_view()),
+    path('game/active', game_views.ActiveGameView.as_view())
 ]

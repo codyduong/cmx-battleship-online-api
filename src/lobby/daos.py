@@ -51,7 +51,7 @@ def request_random_match():
 def game_status(game_id: int):
     with connections.cursor() as db:
         db.execute("""
-            select player_two_id, player_two_id, game_expiration, game_phase, game_state
+            select player_one_id, player_two_id, game_expiration, game_phase, game_state
                    FROM game_session
             where game_id = %s
         """), (game_id)
