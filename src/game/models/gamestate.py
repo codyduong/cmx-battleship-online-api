@@ -9,6 +9,7 @@ from .gameboard import GameBoard
 from .validation import ensure_valid_tile_id
 
 
+type GamePhase = 'p1win' | 'p2win' | 'nowin' | 'goodg'
 
 def other_player(player: Player) -> Player:
     if player == PLAYER_ONE:
@@ -58,6 +59,20 @@ class GameState:
 
 
     # getters
+    def gen_game_phase(self) -> GamePhase:
+        p1state = self._get_state('p1')
+        p2state = self._get_state('p2')
+
+
+        if len(p1state.hit_tile_ids) == len(p2state.board.all_tiles()):
+            return 'p1win'
+
+        if len(p2state.hit_tile_ids) == len(p1state.board.all_tiles()):
+            return 'p2win'
+
+        return 'goodg'
+
+
     def getState(self, player: Player) -> GameStateResponse:
         return self._get_state(player)
 

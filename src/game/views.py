@@ -62,10 +62,12 @@ class ActiveGameView(SessionView):
 
         game_state: GameState = game_session.game_state
 
-        if game_state.all_ships_placed() and game_session.game_phase == 'selct':
+        game_state_response = game_state.getState(player_one_or_two)
+
+        if (game_state.all_ships_placed() and game_session.game_phase == 'selct') or game_state.gen_game_phase() != 'goodg':
+            game_session.game_phase = game_state.gen_game_phase();
             game_dao.submit_move(game_session)
 
-        game_state_response = game_state.getState(player_one_or_two)
 
         game_state_json: Optional[str]
         if game_state_response is None:
@@ -103,6 +105,8 @@ class ActiveGameView(SessionView):
 
         game_state: GameState = game_session.game_state
         response = game_state.recordPlay(player_one_or_two, play)
+
+        game_session.game_phase = game_state.gen_game_phase()
 
         game_session.active_turn = other_player(player_one_or_two)
         # game_session.game_state = game_state
