@@ -110,9 +110,8 @@ class ActiveGameView(SessionView):
 
         return Response(status=200, data=response)
 
-    # TODO implement forheit game
-    # @staticmethod
-    # def delete(request: Request) -> Response:
-    #     game_dao.forfeit_game(request.user.session_id)
-    #     return Response(status=204)
+    @staticmethod
+    def delete(request: Request) -> Response:
+        game_dao.forfeit_game(request.user.session_id)
+        return Response(status=204)
     

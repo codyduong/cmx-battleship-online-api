@@ -57,8 +57,13 @@ def create_game_request(current_player_id: str, requested_player_id: str):
     with connections.cursor() as db:
         db.execute("""
             insert into game_request (player_invite_from, player_invite_to) 
-            VALUES (%s,%s)
-        """, (current_player_id, requested_player_id,))
+            VALUES (%s,%s);
+            
+            delete from game_session
+            where 
+                player_one_id = %s or player_two_id = %s
+                or player_one_id = %s or player_two_id = %s
+        """, (current_player_id, requested_player_id, current_player_id, requested_player_id, requested_player_id, current_player_id))
 
 def accept_match_request(player_id: int, game_request_id: int):
 

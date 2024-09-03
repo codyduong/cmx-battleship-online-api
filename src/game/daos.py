@@ -41,13 +41,16 @@ def submit_move(game_session: ActiveGameSession) -> ActiveGameSession:
         ))
 
 
-def forfeit_game(session_id: uuid):
+def forfeit_game(player_id: str):
     try:
         with connections.cursor() as db:
             db.execute("""
-                delete from game_session where session_id = %s;
-            """, (session_id,))
+                update game_session
+                set game_phase = 'nowin'
+                where
+                    player_one_id = %s
+                    or player_two_id = %s;
+            """, (player_id,player_id,))
 
-        logging.info(f"Safely terminated session {session_id}")
     except Exception as e:
-        logging.error('error on end_session', e)
+        logging.error('error on forfeit_game', e)
