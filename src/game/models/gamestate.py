@@ -2,15 +2,12 @@ import json
 import logging
 from typing import Optional
 
-from django_utils_morriswa.exceptions import BadRequestException
+from django_utils_morriswa.exceptions import BadRequestException, ValidationException
 
+from .gameplay import Play, Player, PLAYER_TWO, PLAYER_ONE
 from .gameboard import GameBoard
 from .validation import ensure_valid_tile_id
 
-
-PLAYER_ONE = 'p1'
-PLAYER_TWO = 'p2'
-type Player = PLAYER_ONE | PLAYER_TWO
 
 
 def other_player(player: Player) -> Player:
@@ -91,8 +88,8 @@ class GameState:
         setattr(self, f'{player}_board', valid_board)
         self.validate()
 
-    def recordPlay(self, player_id: str, tile_id: str) -> GameStateResponse:
-        return self._record_play(player_id, tile_id)
+    def recordPlay(self, player_id: Player, play: Play) -> GameStateResponse:
+        return self._record_play(player_id, play.tile_id)
 
 
     # state
@@ -147,7 +144,7 @@ class GameState:
 
         return GameStateResponse(hit_tile_ids, miss_tile_ids, player_board, enemy_ships_remaining)
 
-    def _record_play(self, player, tile_id: str):
+    def _record_play(self, player: Player, tile_id: str):
         ensure_valid_tile_id(tile_id)
         player_attacks: list[str] = getattr(self, f'{player}_attacks')
         if tile_id in player_attacks:
