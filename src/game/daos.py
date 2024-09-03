@@ -1,25 +1,45 @@
 import logging
 import uuid
+
+from django_utils_morriswa.exceptions import BadRequestException
+
 from app import connections
-
-def init_move(state: object):
-    try:
-        with connections.cursor() as db:
-            db.execute("""select state
-                       from game_session
-                       where state = $s""", (state))
-    except Exception as e:
-        logging.error('Unable to process init move', e)
+from .models import ActiveGameSession
 
 
-
-def make_move(game_id: int):
+def retrieve_active_game_session(player_id: str) -> ActiveGameSession:
     with connections.cursor() as db:
         db.execute("""
-        select game_expiration, game_phase, game_state
-                   from game session
-                   where game_id = %s
-"""), (game_id)
+            select *
+            from game_session 
+            where 
+                player_one_id = %s
+                or player_two_id = %s
+        """, (player_id, player_id,))
+        result = db.fetchone()
+        if result is None:
+            raise BadRequestException('failed to locate game session')
+        return GameSession(result)
+
+def submit_move(game_session: ActiveGameSession) -> ActiveGameSession:
+    with connections.cursor() as db:
+        db.execute("""
+            update game_session
+            set
+                game_state = %s,
+                active_turn = %s,
+                last_play = current_timestamp
+            where game_id = %s;
+        """, (
+            game_session.game_state.json(),
+            game_session.active_turn,
+            game_session.game_id,
+        ))
+        result = db.fetchone()
+        if result is None:
+            raise BadRequestException('failed to locate game session')
+        return GameSession(result)
+
 
 def forfeit_game(session_id: uuid):
     try:
