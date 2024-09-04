@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from user_session.models import LoginRequest
 import user_session.daos as user_session_dao
 
-from app.views import any_view, session_view
+from app.decorators import any_view, session_view
 
 @any_view(['GET'])
 def get_online_player_count(request: Request) -> Response:

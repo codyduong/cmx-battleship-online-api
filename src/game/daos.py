@@ -3,7 +3,7 @@ import uuid
 import json
 from typing import Optional
 
-from django_utils_morriswa.exceptions import BadRequestException
+from app.exceptions import BadRequestException
 
 from app import connections
 from .models import ActiveGameSession

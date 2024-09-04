@@ -1,7 +1,7 @@
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from app.views import any_view, session_view
+from app.decorators import any_view, session_view
 
 
 @any_view(['GET'])

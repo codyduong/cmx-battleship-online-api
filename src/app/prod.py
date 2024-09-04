@@ -1,4 +1,6 @@
-from app.defaults import *
+# Production Deployment Settings
+
+from app.settings import *
 
 from socket import gethostbyname, gethostname
 

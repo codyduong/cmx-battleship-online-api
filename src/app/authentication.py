@@ -9,7 +9,9 @@ import user_session.daos as user_session_dao
 
 
 class PlayerAuthentication(BaseAuthentication):
-    """ provides a django authentication class that verifies a request contains a valid session header """
+    """ provides a django authentication class that verifies a request contains a valid session header
+        :author William Morris
+    """
 
     @override
     @staticmethod

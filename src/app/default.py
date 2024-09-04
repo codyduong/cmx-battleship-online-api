@@ -1,10 +1,13 @@
+
+# Default Deployment Settings
+
 from dotenv import load_dotenv
 
 # load secrets to ENV
 load_dotenv('secrets.properties')
 
 # Include all default settings
-from app.defaults import *
+from app.settings import *
 
 # Add env specific settings
 RUNTIME_ENVIRONMENT = "local"

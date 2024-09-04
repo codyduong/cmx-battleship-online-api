@@ -1,6 +1,6 @@
 import logging
 import uuid
-from django_utils_morriswa.exceptions import BadRequestException
+from app.exceptions import BadRequestException
 import datetime
 
 from app import connections

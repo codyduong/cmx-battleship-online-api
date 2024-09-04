@@ -2,7 +2,7 @@ import json
 import logging
 from typing import Optional
 
-from django_utils_morriswa.exceptions import BadRequestException, ValidationException
+from app.exceptions import BadRequestException, ValidationException
 
 from .gameplay import Play, Player, PLAYER_TWO, PLAYER_ONE
 from .gameboard import GameBoard

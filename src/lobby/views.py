@@ -2,7 +2,9 @@ import logging
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from app.views import SessionView, session_view
+from app.views import SessionView
+from app.decorators import session_view
+
 import lobby.daos as lobby_dao
 
 

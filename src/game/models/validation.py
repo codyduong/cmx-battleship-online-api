@@ -1,4 +1,4 @@
-from django_utils_morriswa.exceptions import ValidationException, BadRequestException
+from app.exceptions import ValidationException, BadRequestException
 
 
 

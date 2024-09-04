@@ -1,4 +1,4 @@
-from django_utils_morriswa.exceptions import BadRequestException, ValidationException
+from app.exceptions import BadRequestException, ValidationException
 
 from .validation import ensure_valid_ship_row
 

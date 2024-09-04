@@ -4,7 +4,7 @@ import datetime
 from typing import Optional
 
 from django.db import IntegrityError
-from django_utils_morriswa.exceptions import BadRequestException, APIException
+from app.exceptions import BadRequestException, APIException
 
 from app import connections
 from user_session.models import LoginRequest, AuthenticatedPlayer

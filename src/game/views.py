@@ -4,8 +4,9 @@ from typing import Optional
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from django_utils_morriswa.exceptions import APIException, BadRequestException
-from app.views import SessionView, session_view
+from app.exceptions import APIException, BadRequestException
+from app.views import SessionView
+from app.decorators import session_view
 from game.models import GameStateResponse, ActiveGameSession, GameState, Player, Play, PLAYER_ONE, PLAYER_TWO, other_player, GameBoard
 import game.daos as game_dao
 

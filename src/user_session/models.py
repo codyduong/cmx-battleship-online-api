@@ -3,9 +3,8 @@ import uuid
 from datetime import datetime
 from typing import Optional, override
 
-from django_utils_morriswa.exceptions import ValidationException, APIException
-from django_utils_morriswa.models import DataModel
-from django_utils_morriswa.str_tools import isBlank
+from app.exceptions import ValidationException, APIException
+from app.str_tools import isBlank
 
 
 # settings
@@ -39,7 +38,7 @@ class AuthenticatedPlayer:
 
 
 
-class LoginRequest(DataModel):
+class LoginRequest:
 
     def __init__(self, data: dict):
         self.player_name: str = data.get('player_name')

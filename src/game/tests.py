@@ -2,7 +2,7 @@ import json
 from django.test import TestCase
 from django.conf import settings
 
-from django_utils_morriswa.exceptions import ValidationException, BadRequestException
+from app.exceptions import ValidationException, BadRequestException
 
 from game.models import GameBoard, GameState, Play
 
