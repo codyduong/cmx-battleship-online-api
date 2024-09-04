@@ -116,6 +116,6 @@ class ActiveGameView(SessionView):
 
     @staticmethod
     def delete(request: Request) -> Response:
-        game_dao.forfeit_game(request.user.session_id)
+        game_dao.forfeit_game(request.user.player_id)
         return Response(status=204)
     

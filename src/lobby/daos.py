@@ -66,7 +66,8 @@ def create_game_request(player_invite_from: str, player_invite_to: str):
                 
                 delete from game_session
                 where 
-                    player_one_id = var_player_invite_from or player_two_id = var_player_invite_from;
+                    player_one_id = var_player_invite_from 
+                    or player_two_id = var_player_invite_from;
             end$$;
         """, (player_invite_from, player_invite_to,))
 

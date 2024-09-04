@@ -45,8 +45,7 @@ def forfeit_game(player_id: str):
     try:
         with connections.cursor() as db:
             db.execute("""
-                update game_session
-                set game_phase = 'nowin'
+                delete from game_session
                 where
                     player_one_id = %s
                     or player_two_id = %s;
