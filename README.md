@@ -20,9 +20,6 @@
     - NOTE: to reset project environment (macos, linux, powershell?)
 
           rm -rf bin include lib pyvenv.cfg
-- Setup PIP with morriswa-central repository (assumes AWS CLI is already configured with morriswa-developer credentials)
-
-      aws codeartifact login --tool pip --domain morriswa-org --repository morriswa-central
 - Install project in development mode and dependencies with PIP 
 
       pip install -e .
@@ -33,7 +30,7 @@
       DB_NAME=database_name_here
       DB_USER=database_username_here
       DB_PASSWORD=database_password_here
-
+      SECRET_KEY=a_bunch_of_nonsense
 - Setup development database
 
       ./src/manage.py migrate
