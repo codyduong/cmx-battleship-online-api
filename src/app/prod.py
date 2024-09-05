@@ -19,7 +19,6 @@ CORS_ALLOWED_ORIGINS = [
 ]
 ALLOWED_HOSTS = [
     'cmx-battleship-online-api.f2iq9gqbr52r0.us-east-2.cs.amazonlightsail.com',
-    gethostbyname('cmx-battleship-online-api.f2iq9gqbr52r0.us-east-2.cs.amazonlightsail.com'),
     gethostbyname(gethostname())
 ]
 CORS_ALLOW_METHODS = (
