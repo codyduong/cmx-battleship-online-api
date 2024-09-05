@@ -26,7 +26,7 @@ COPY pyproject.toml .
 RUN pip install .
 
 # set entrypoint (command which will run when container is started)
-CMD ["gunicorn", "-b", "0.0.0.0:8000", "--chdir", "/app", "app.wsgi"]
+CMD ["gunicorn", "-b", "cmx-battleship-online-api.service.local:8000", "--chdir", "/app", "app.wsgi"]
 
 # expose appropriate API port
 EXPOSE 8000
