@@ -69,6 +69,4 @@ jobs:
         deactivate
         
         docker build . -t morriswa/cmx-battleship-online-api:$APP_VERSION
-        docker build ./nginx -t morriswa/cmx-battleship-online-api-proxy:$APP_VERSION
         docker push morriswa/cmx-battleship-online-api:$APP_VERSION
-        docker push morriswa/cmx-battleship-online-api-proxy:$APP_VERSION
