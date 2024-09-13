@@ -1,11 +1,12 @@
 from datetime import datetime
 from typing import Optional, override
 
-from app.exceptions import ValidationException
+from app.exceptions import ValidationException, APIException
 from app.str_tools import isBlank
 
 
 class GameRequest:
+    """ model for active game request """
     def __init__(self,data:dict):
         self.game_request_id: int= data.get('game_request_id')
         self.player_id: str = data.get('player_id')
@@ -19,22 +20,18 @@ class GameRequest:
         }
 
 class AvailablePlayerResponse:
+    """ model for available player """
     def __init__(self,data:dict):
         self.player_id: str = data.get('player_id')
         self.player_name: str = data.get('player_name')
 
         if self.player_id is None:
-            raise Exception('player_id cannot be None')
+            raise APIException('player_id cannot be None')
 
         if self.player_name is None:
-            raise Exception('player_name cannot be None')
+            raise APIException('player_name cannot be None')
 
-    @override
-    def validate(self): pass
-    @override
-    def copy(self, data: dict): pass
 
-    @override
     def json(self):
         return{
             'player_id': self.player_id,

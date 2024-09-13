@@ -1,10 +1,12 @@
+import logging
 from functools import wraps
 
-from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from rest_framework.decorators import permission_classes, authentication_classes, api_view
 from rest_framework.permissions import IsAuthenticated
 
 from app.authentication import PlayerAuthentication
+from app.exceptions import APIException
 
 
 def app_exception_handler(f):

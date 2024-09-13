@@ -22,6 +22,7 @@ class AuthenticatedPlayer:
         self.player_name = data.get('player_name')
         self.session_started = data.get('session_started')
 
+        # assert all fields are present
         if self.session_id is None:
             raise APIException('session_id required')
 
@@ -39,22 +40,23 @@ class AuthenticatedPlayer:
 
 
 class LoginRequest:
+    """ model for login/session creation request """
 
     def __init__(self, data: dict):
         self.player_name: str = data.get('player_name')
         self.num_ships: str = data.get('num_ships')
 
+        # assert player name and ship preferences is set
         if self.player_name is None or isBlank(self.player_name):
             raise ValidationException(field='player_name', error='required')
 
         if self.num_ships is None or isBlank(self.num_ships):
             raise ValidationException(field='num_ships', error='required')
 
+        # do field validations
         self.validate()
 
-    @override
     def validate(self):
-
         if len(self.player_name) < USER_SESSION_PLAYER_NAME_MIN_LEN:
             raise ValidationException(field='player_name', error=f'min len {USER_SESSION_PLAYER_NAME_MIN_LEN}')
         elif len(self.player_name) > USER_SESSION_PLAYER_NAME_MAX_LEN:
@@ -64,9 +66,3 @@ class LoginRequest:
 
         if self.num_ships not in USER_SESSION_NUM_SHIPS_OPTIONS:
             raise ValidationException('num_ships', f'options: {USER_SESSION_NUM_SHIPS_OPTIONS}')
-
-    @override
-    def copy(self, data: dict): pass
-
-    @override
-    def json(self): pass

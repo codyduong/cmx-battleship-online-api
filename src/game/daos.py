@@ -23,7 +23,7 @@ def retrieve_active_game_session(player_id: str) -> Optional[ActiveGameSession]:
         #     raise BadRequestException('failed to locate game session')
         return ActiveGameSession(result) if result is not None else None
 
-def submit_move(game_session: ActiveGameSession) -> ActiveGameSession:
+def save_active_game_session(game_session: ActiveGameSession) -> ActiveGameSession:
     with connections.cursor() as db:
         db.execute("""
             update game_session
@@ -41,7 +41,7 @@ def submit_move(game_session: ActiveGameSession) -> ActiveGameSession:
         ))
 
 
-def forfeit_game(player_id: str):
+def delete_active_game_session(player_id: str):
     try:
         with connections.cursor() as db:
             db.execute("""
@@ -52,4 +52,4 @@ def forfeit_game(player_id: str):
             """, (player_id,player_id,))
 
     except Exception as e:
-        logging.error('error on forfeit_game')
+        logging.error('error on delete_active_game_session')
