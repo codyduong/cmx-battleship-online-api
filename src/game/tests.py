@@ -1,3 +1,4 @@
+
 import json
 from django.test import TestCase
 from django.conf import settings
@@ -5,7 +6,7 @@ from django.conf import settings
 from app.exceptions import ValidationException, BadRequestException
 
 from game.models import GameBoard, GameState, Play
-
+#Runs tests for the game models 
 class GameBoardModelTest(TestCase):
 
     def test_create_invalid_json_too_many_tiles_for_ship1(self):

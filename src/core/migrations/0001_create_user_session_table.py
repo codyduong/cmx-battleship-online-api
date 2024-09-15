@@ -1,6 +1,7 @@
 from django.db import migrations
 
-
+#New migration class to create the user session table
+#Inherits from djangos migrations class
 class Migration(migrations.Migration):
     """
     Creates and fills Player Slot table
@@ -8,8 +9,11 @@ class Migration(migrations.Migration):
 
     :authors kevin rivers, William Morris
     """
+    #Finds any migrations that need to run first
     dependencies = []
+    #operations that need to be run during this migration
     operations = [
+        #Runs SQL commands as part of the migration
         migrations.RunSQL(
             sql="""
                 -- William morris
@@ -20,13 +24,17 @@ class Migration(migrations.Migration):
                 
                 -- Insert all possible player_id values from '0000' to '9999'
                 -- William morris 
+                -- Creates 10,000 player slots 
                 DO $$
                 DECLARE
                     i INTEGER;
                     player_id CHAR(4);
                 BEGIN
+                    -- Loops from 0 to 9999
                     FOR i IN 0..9999 LOOP
+                        -- Convert i to a string and pad with zeros 
                         player_id := LPAD(i::TEXT, 4, '0');
+                        -- Insert the player_id into the player_slot table with the generated player id
                         INSERT INTO player_slot (player_id, in_use) VALUES (player_id, 'N');
                     END LOOP;
                 END $$;
