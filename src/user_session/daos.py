@@ -57,7 +57,18 @@ def get_available_player_id() -> str:
 
     return player_id
 
+
 def start_session(session: LoginRequest) -> dict:
+    """ Start Session Function
+        We will declare gen_session_id as a uuid
+        We will declare a gen_player_id as a string
+
+        We connect to the db, as we are connected, we will generate a random uuid and call the get_available_player id for respective variables declared.
+        Now, we will insert into the user_session table values of (session_id, player_id, player_name, num_ships) 
+        
+        If it works, we display a log of the successfully started session and return the session and player ids
+        If it doesn't work, we will display the error message.
+    """ 
     try:
         gen_session_id: uuid
         gen_player_id: str
@@ -81,6 +92,15 @@ def start_session(session: LoginRequest) -> dict:
 
 
 def end_session(session_id: uuid) -> None:
+    """ 
+        Ending session function
+
+        In this function, we connect to the db 
+        If we can find the session_id, we delete it from the user_session table with the session_id given in the params of this function.
+
+        If it works, we log that the session was safely terminated and return which session it was
+        If it doesn't work, we log the error and try to debug. 
+"""
     try:
         with connections.cursor() as db:
             db.execute("""
