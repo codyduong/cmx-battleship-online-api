@@ -7,7 +7,7 @@ from app import connections
 from django.db import IntegrityError
 from lobby.models import GameRequest, AvailablePlayerResponse
 
-
+# This function retrieves all available players in the lobby
 def get_available_players(session_id: uuid) -> list[AvailablePlayerResponse]:
     with connections.cursor() as db:
         db.execute("""
@@ -30,7 +30,7 @@ def get_available_players(session_id: uuid) -> list[AvailablePlayerResponse]:
         results = db.fetchall()
         return [AvailablePlayerResponse(result) for result in results]
 
-
+# This function retrieves all game requests from other players
 def get_game_requests(player_id: str) -> list[GameRequest]:
 
     db_result: list[dict]
@@ -51,7 +51,7 @@ def get_game_requests(player_id: str) -> list[GameRequest]:
         db_result: list = db.fetchall()
 
         return [GameRequest(data) for data in db_result]
-        
+# This function creates a game request to player with specified player_id       
 def create_game_request(player_invite_from: str, player_invite_to: str):
 
     if player_invite_from == player_invite_to:
@@ -74,7 +74,7 @@ def create_game_request(player_invite_from: str, player_invite_to: str):
                 player_one_id = %s 
                 or player_two_id = %s;
         """, (player_invite_from, player_invite_from,))
-
+# This function accepts a pending match request
 def accept_match_request(player_id: int, game_request_id: int):
 
     with connections.cursor() as db:
@@ -119,7 +119,7 @@ def accept_match_request(player_id: int, game_request_id: int):
             where gr.player_invite_from = %s
             or gr.player_invite_to = %s;
         """, (player_id, player_id))
-
+# This function requests a random match
 def request_random_match():
     raise NotImplementedError('please implement me!')
 

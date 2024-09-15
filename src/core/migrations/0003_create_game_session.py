@@ -6,9 +6,12 @@ class Migration(migrations.Migration):
     creates the game session
     :author Timothy Holmes
     """
+    #Dependencies for 0003_create_game_session
     dependencies = [(('core', '0002_create_game_request'))]
+    #Operations that need to be run during this migration
     operations = [
         migrations.RunSQL(
+            #SQL command to create the game session table 
             sql="""create table game_session (
                 game_id uuid primary key, 
                 player_one_id char(4) not null unique 
@@ -24,6 +27,7 @@ class Migration(migrations.Migration):
                 game_phase char(5) not null check (game_phase in ('selct','goodg','p1win','p2win','nowin'))
             );
             """,
+            #SQL statment to drop the table if the migration is reversed 
             reverse_sql="""
                 drop table game_session;
             """

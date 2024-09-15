@@ -7,7 +7,7 @@ from app.decorators import session_view
 
 import lobby.daos as lobby_dao
 
-
+#HTTP function to GET all available players 
 @session_view(['GET'])
 def get_available_players(request: Request) -> Response:
     """ returns list of all available players in requested lobby, excluding requestor """

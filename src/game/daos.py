@@ -11,6 +11,7 @@ from .models import ActiveGameSession
 
 def retrieve_active_game_session(player_id: str) -> Optional[ActiveGameSession]:
     with connections.cursor() as db:
+        #Execute the query to get the game session for player1 or player2
         db.execute("""
             select *
             from game_session 
@@ -25,6 +26,7 @@ def retrieve_active_game_session(player_id: str) -> Optional[ActiveGameSession]:
 
 def save_active_game_session(game_session: ActiveGameSession) -> ActiveGameSession:
     with connections.cursor() as db:
+        #Execute the query to updte the game session
         db.execute("""
             update game_session
             set
@@ -44,7 +46,9 @@ def save_active_game_session(game_session: ActiveGameSession) -> ActiveGameSessi
 def delete_active_game_session(player_id: str):
     try:
         with connections.cursor() as db:
+            #Execute the query to delete the game session
             db.execute("""
+                
                 delete from game_session
                 where
                     player_one_id = %s
@@ -52,4 +56,5 @@ def delete_active_game_session(player_id: str):
             """, (player_id,player_id,))
 
     except Exception as e:
+        #Logs any errors that occur during the deletion of the game session
         logging.error('error on delete_active_game_session')
