@@ -15,4 +15,9 @@ build/
 testdb
 
 ### secrets ###
-secrets.properties
+*.properties
+!default.properties
+!test.properties
+
+.python-version
+Scripts
